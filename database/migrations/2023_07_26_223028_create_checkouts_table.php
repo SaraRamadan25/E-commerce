@@ -23,6 +23,14 @@ return new class extends Migration
             $table->string('city');
             $table->string('state');
             $table->string('zip_code');
+            $table->string('payment_method');
+            $table->string('card_number');
+            $table->string('card_exp_month');
+            $table->string('card_exp_year');
+            $table->string('card_cvv');
+
+            $table->timestamps();
+
         });
     }
 

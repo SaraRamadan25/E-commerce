@@ -11,13 +11,17 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('frequently_asked_questions', function (Blueprint $table) {
+        Schema::create('faqs', function (Blueprint $table) {
             $table->id();
             $table->string('username');
             $table->text('question');
+            $table->text('answer');
             $table->string('tags');
             $table->boolean('popularity');
-            $table->date('lastAskedDate');
+            $table->date('last_asked_date');
+
+            $table->timestamps();
+
         });
     }
 

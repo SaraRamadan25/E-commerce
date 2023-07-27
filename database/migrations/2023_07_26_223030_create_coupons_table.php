@@ -14,9 +14,12 @@ return new class extends Migration
 
         Schema::create('coupons', function (Blueprint $table) {
             $table->id();
-            $table->string('code');
+            $table->integer('code');
             $table->string('status')->default('available');
             $table->foreignId('offer_id')->constrained();
+            $table->foreignId('checkout_id')->constrained();
+            $table->timestamps();
+
         });
 
     }
