@@ -23,19 +23,17 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        $this->call([
-            CartSeeder::class,
-            CategorySeeder::class,
-            CheckoutSeeder::class,
-            ContactSeeder::class,
-            CouponSeeder::class,
-            FaqSeeder::class,
-            OfferSeeder::class,
-            ProductSeeder::class,
-            ReviewSeeder::class,
-            SubscriberSeeder::class,
-        ]);
-         User::factory(1)->create();
+        Cart::factory(1)->create();
+        Category::factory(1)->create();
+        Checkout::factory(1)->create();
+        Contact::factory(1)->create();
+        Coupon::factory(1)->create();
+        Faq::factory(1)->create();
+        Offer::factory(1)->create();
+        Product::factory(1)->create();
+        Review::factory(1)->create();
+        Subscriber::factory(1)->create();
+        User::factory(1)->create();
 
         // \App\Models\User::factory()->create([
         //     'name' => 'Test User',
