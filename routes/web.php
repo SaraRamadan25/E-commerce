@@ -1,5 +1,8 @@
 <?php
 
+use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\ContactController;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
@@ -28,6 +31,11 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
+Route::get('index',[HomeController::class,'index'])->name('index');
+Route::get('categories',[CategoryController::class,'index'])->name('categories.index');
+Route::get('categories/{category:slug}', [CategoryController::class, 'show'])->name('categories.show');
+Route::get('contact',[ContactController::class,'index'])->name('contact.index');
+Route::post('contact',[ContactController::class,'store'])->name('contact.store');
 
 Route::get('cart',function (){
 return view('cart');
@@ -37,16 +45,9 @@ Route::get('checkout',function (){
     return view('checkout');
 });
 
-Route::get('contact',function (){
-    return view('contact');
-});
 
 Route::get('detail',function (){
     return view('detail');
-});
-
-Route::get('index',function (){
-    return view('index');
 });
 
 Route::get('shop',function (){

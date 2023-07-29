@@ -44,5 +44,15 @@ class Product extends Model
         return $this->hasMany(Review::class);
     }
 
+    public function presentOriginalPrice(): string
+    {
+        return '$' . number_format($this->original_price, 2);
+    }
+
+    public function presentPriceAfterOffer(): string
+    {
+        return '$' . number_format($this->price_after_offer, 2);
+    }
+
 
 }

@@ -2,9 +2,11 @@
 
 namespace Database\Factories;
 
+use App\Models\Cart;
 use App\Models\Category;
 use App\Models\Checkout;
 use App\Models\Offer;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -29,6 +31,8 @@ class ProductFactory extends Factory
             'category_id' => Category::factory(),
             'offer_id' => Offer::factory(),
             'checkout_id' => Checkout::factory(),
+            'cart_id' => Cart::factory(),
+            'rate'=>$this->faker->numberBetween(1,5),
             'image' => $this->faker->imageUrl(),
         ];
     }

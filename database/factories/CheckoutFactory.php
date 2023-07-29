@@ -28,11 +28,9 @@ class CheckoutFactory extends Factory
             'country' => $this->faker->country(),
             'zip_code' => $this->faker->postcode(),
             'payment_method' => $this->faker->creditCardType(),
-            'card_number' => $this->faker->creditCardNumber(),
-            'card_exp_month' => $this->faker->creditCardExpirationDate(),
-            'card_exp_year' => $this->faker->creditCardExpirationDate(),
-            'card_cvv' => $this->faker->creditCardExpirationDate(),
-
+            'subtotal'=> 300.55,
+            'shipping_fees'=> 100,
+            'total'=> 400.55,
         ];
     }
 }

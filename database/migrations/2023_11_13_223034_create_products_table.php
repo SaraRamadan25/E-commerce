@@ -18,12 +18,13 @@ return new class extends Migration
             $table->text('description');
             $table->string('size');
             $table->string('color');
-            $table->decimal('original_price');
-            $table->decimal('price_after_offer');
-/*            $table->bigInteger('rate');*/
+            $table->integer('original_price');
+            $table->integer('price_after_offer');
+           $table->string('rate');
             $table->foreignId('category_id')->constrained();
             $table->foreignid('offer_id')->constrained();
             $table->foreignId('checkout_id')->constrained();
+            $table->foreignId('cart_id')->constrained();
             $table->string('image')->nullable();
 
             $table->timestamps();

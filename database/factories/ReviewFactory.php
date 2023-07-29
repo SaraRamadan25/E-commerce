@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\Product;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -22,6 +23,8 @@ class ReviewFactory extends Factory
             'email'=>$this->faker->email(),
             'review'=>$this->faker->text(),
             'product_id'=>Product::factory(),
+            'rate'=>$this->faker->numberBetween(1,5),
+            'user_id'=>User::factory(),
         ];
     }
 }

@@ -20,10 +20,10 @@ class CartFactory extends Factory
     public function definition(): array
     {
         return [
-            'price'=> $this->faker->randomFloat(2, 0, 1000),
-            'total_price' => $this->faker->randomFloat(2, 0, 1000),
-            'quantity' => $this->faker->numberBetween(1, 10),
-            'product_id' => Product::factory(),
+            'single_item_price'=> $this->faker->randomNumber(4),
+            'total_price' => $this->faker->randomNumber(4),
+            'quantity' => $this->faker->randomNumber(4),
+            'user_id' => User::factory(),
             'checkout_id' => Checkout::factory(),
 
         ];

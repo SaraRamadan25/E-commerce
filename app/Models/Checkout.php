@@ -23,6 +23,9 @@ class Checkout extends Model
         'country',
         'state',
         'zip_code',
+        'subtotal',
+        'shipping_fees',
+        'total',
         'payment_method',
     ];
 

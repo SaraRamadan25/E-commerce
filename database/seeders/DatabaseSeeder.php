@@ -23,17 +23,20 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        Cart::factory(1)->create();
-        Category::factory(1)->create();
-        Checkout::factory(1)->create();
-        Contact::factory(1)->create();
-        Coupon::factory(1)->create();
-        Faq::factory(1)->create();
-        Offer::factory(1)->create();
-        Product::factory(1)->create();
-        Review::factory(1)->create();
-        Subscriber::factory(1)->create();
-        User::factory(1)->create();
+        Category::factory()->create();
+        Checkout::factory()->create();
+        Contact::factory()->create();
+        Coupon::factory()->create();
+        Faq::factory()->create();
+        Offer::factory()->create();
+        Subscriber::factory()->create();
+        User::factory()->create();
+        Cart::factory()->create();
+        Product::factory()->create();
+        Review::factory()->create();
+
+
+
 
         // \App\Models\User::factory()->create([
         //     'name' => 'Test User',

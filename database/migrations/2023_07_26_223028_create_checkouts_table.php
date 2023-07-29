@@ -24,10 +24,10 @@ return new class extends Migration
             $table->string('state');
             $table->string('zip_code');
             $table->string('payment_method');
-            $table->string('card_number');
-            $table->string('card_exp_month');
-            $table->string('card_exp_year');
-            $table->string('card_cvv');
+            $table->integer('subtotal');
+            $table->integer('shipping_fees');
+            $table->integer('total');
+
 
             $table->timestamps();
 
