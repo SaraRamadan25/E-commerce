@@ -135,12 +135,15 @@
                 <div class="product-item bg-light mb-4">
                     <div class="product-img position-relative overflow-hidden">
                         <img class="img-fluid w-100" src="{{ $featured_product->image_url }}" alt="">
-                        <div class="product-action">
-                            <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-shopping-cart"></i></a>
-                            <a class="btn btn-outline-dark btn-square" href=""><i class="far fa-heart"></i></a>
-                            <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-sync-alt"></i></a>
-                            <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-search"></i></a>
-                        </div>
+                        <form action="{{ route('cart.store') ,$featured_product->id }}" method="POST">
+                            @csrf
+                            <input type="hidden" name="id" value="{{ $featured_product->id }}">
+                            <input type="hidden" name="name" value="{{ $featured_product->name }}">
+                            <input type="hidden" name="price" value="{{ $featured_product->price }}">
+                            <button type="submit" class="button button-plain">Add to Cart</button>
+                        </form>
+                    </div>
+                </div> <!-- end product-section -->
                     </div>
                     <div class="text-center py-4">
                         <a class="h6 text-decoration-none text-truncate" href="">{{ $featured_product->name }}</a>
@@ -268,6 +271,8 @@
     </div>
 </div>
 <!-- Vendor End -->
+
+
 
 <x-footer />
 

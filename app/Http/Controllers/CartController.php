@@ -2,6 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CartRequest;
+use App\Http\Requests\ProductRequest;
+use App\Models\Product;
+use Gloudemans\Shoppingcart\Facades\Cart;
 use Illuminate\Http\Request;
 
 class CartController extends Controller
@@ -11,54 +15,31 @@ class CartController extends Controller
      */
     public function index()
     {
-        return view('cart');
+        $products = Product::all();
+        return view('carts.index', compact('products'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    public function store(ProductRequest $request)
     {
-        //
+        $product = Product::findOrFail($request->input('id'));
+        Cart::add(
+            $product->id,
+            $product->name,
+            $product->quantity,
+            $product->price_after_offer / 100,
+        )->associate('Product');
+
+        return redirect()->route('products.index')->with('message', 'Successfully added');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+    public function destroy($id)
     {
-        //
+        Cart::remove($id);
+        return back()->with('success_message', 'Item has been removed from your cart!');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
+    // Your other controller methods here...
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
-    }
 }

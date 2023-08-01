@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('name');
             $table->text('description');
             $table->string('size');
+            $table->integer('quantity');
             $table->string('color');
             $table->integer('original_price');
             $table->integer('price_after_offer');

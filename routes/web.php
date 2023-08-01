@@ -1,8 +1,10 @@
 <?php
 
+use App\Http\Controllers\CartController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
@@ -37,9 +39,11 @@ Route::get('categories/{category:slug}', [CategoryController::class, 'show'])->n
 Route::get('contact',[ContactController::class,'index'])->name('contact.index');
 Route::post('contact',[ContactController::class,'store'])->name('contact.store');
 
-Route::get('cart',function (){
-return view('cart');
-});
+Route::get('cart/{product}', [CartController::class,'show'])->name('shop.show');
+Route::get('cart',[CartController::class,'index'])->name('cart.index');
+Route::post('cart',[CartController::class,'store'])->name('cart.store');
+
+Route::get('products',[ProductController::class,'index'])->name('products.index');
 
 Route::get('checkout',function (){
     return view('checkout');
