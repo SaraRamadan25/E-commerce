@@ -22,10 +22,9 @@ return new class extends Migration
             $table->integer('original_price');
             $table->integer('price_after_offer');
            $table->string('rate');
-            $table->foreignId('category_id')->constrained();
-            $table->foreignid('offer_id')->constrained();
-            $table->foreignId('checkout_id')->constrained();
-            $table->foreignId('cart_id')->constrained();
+            $table->foreignId('category_id')->constrained()->cascadeOnDelete();
+            $table->foreignid('offer_id')->nullable();
+            $table->foreignId('cart_id');
             $table->string('image')->nullable();
 
             $table->timestamps();

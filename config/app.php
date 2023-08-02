@@ -156,6 +156,8 @@ return [
     */
 
     'providers' => ServiceProvider::defaultProviders()->merge([
+        Gloudemans\Shoppingcart\ShoppingcartServiceProvider::class,
+
         /*
          * Package Service Providers...
          */
@@ -168,7 +170,8 @@ return [
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
-        Gloudemans\Shoppingcart\ShoppingcartServiceProvider::class
+        Cartalyst\Stripe\Laravel\StripeServiceProvider::class,
+
 
     ])->toArray(),
 
@@ -186,6 +189,8 @@ return [
     'aliases' => Facade::defaultAliases()->merge([
         // 'Example' => App\Facades\Example::class,
         'Cart' => \Gloudemans\Shoppingcart\Facades\Cart::class,
+        'Stripe' => Cartalyst\Stripe\Laravel\Facades\Stripe::class,
+
     ])->toArray(),
 
 ];

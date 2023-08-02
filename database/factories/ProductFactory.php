@@ -31,7 +31,6 @@ class ProductFactory extends Factory
             'category_id' => Category::factory(),
             'quantity' => $this->faker->numberBetween(1, 100),
             'offer_id' => Offer::factory(),
-            'checkout_id' => Checkout::factory(),
             'cart_id' => Cart::factory(),
             'rate'=>$this->faker->numberBetween(1,5),
             'image' => $this->faker->imageUrl(),
