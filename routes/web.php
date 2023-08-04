@@ -34,6 +34,7 @@ Route::post('contact',[ContactController::class,'store'])->name('contact.store')
 
 Route::get('cart',[CartController::class,'index'])->name('cart.index');
 Route::post('cart',[CartController::class,'store'])->name('cart.store');
+Route::patch('/cart/{product}', [CartController::class,'update'])->name('cart.update');
 
 Route::get('products',[ProductController::class,'index'])->name('products.index');
 Route::get('products/{product}',[ProductController::class,'show'])->name('product.show');
@@ -41,6 +42,8 @@ Route::post('products',[ProductController::class,'store'])->name('products.store
 
 Route::get('checkout',[CheckoutController::class,'index'])->name('checkout.index');
 Route::post('checkout',[CheckoutController::class,'store'])->name('checkout.store');
+
+
 
 Route::get('detail',function (){
     return view('detail');

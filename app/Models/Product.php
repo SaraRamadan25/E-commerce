@@ -44,6 +44,7 @@ class Product extends Model
         return $this->hasMany(Review::class);
     }
 
+
     public function presentOriginalPrice(): string
     {
         return '$' . number_format($this->original_price, 2);

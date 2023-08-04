@@ -157,6 +157,7 @@ return [
 
     'providers' => ServiceProvider::defaultProviders()->merge([
         Gloudemans\Shoppingcart\ShoppingcartServiceProvider::class,
+        Cartalyst\Stripe\Laravel\StripeServiceProvider::class,
 
         /*
          * Package Service Providers...

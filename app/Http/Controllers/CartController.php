@@ -11,6 +11,7 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Foundation\Application;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class CartController extends Controller
 {
@@ -43,5 +44,9 @@ class CartController extends Controller
         return back()->with('success_message', 'Item has been removed from your cart!');
     }
 
+    public function update(Request $request, $id)
+    {
+        $request->all();
 
+    }
 }

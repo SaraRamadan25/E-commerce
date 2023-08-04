@@ -1,4 +1,6 @@
 <x-head />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.4/axios.min.js"></script>
+
 <x-breadcrumbs title="Shopping Cart" />
 
 <!-- Cart Start -->
@@ -39,18 +41,13 @@
                         <td class="align-middle">{{ $item->model->original_price }}</td>
                         <td class="align-middle">
                             <div class="input-group quantity mx-auto" style="width: 100px;">
-                                <div class="input-group-btn">
-                                    <button class="btn btn-sm btn-primary btn-minus">
-                                        <i class="fa fa-minus"></i>
-                                    </button>
-                                </div>
-                                <input type="text" class="form-control form-control-sm bg-secondary border-0 text-center"
-                                       value="1">
-                                <div class="input-group-btn">
-                                    <button class="btn btn-sm btn-primary btn-plus">
-                                        <i class="fa fa-plus"></i>
-                                    </button>
-                                </div>
+                                <button class="btn btn-sm btn-primary btn-minus" type="button">
+                                    <i class="fa fa-minus"></i>
+                                </button>
+                                <input type="number" class=" quantity" data-id="{{ $item->rowId }}">
+                                <button class="btn btn-sm btn-primary btn-plus" type="button">
+                                    <i class="fa fa-plus"></i>
+                                </button>
                             </div>
                         </td>
                         <td class="align-middle">{{ $item->model->original_price * $item->qty }}</td>
@@ -89,7 +86,7 @@
                         <h5>Total</h5>
                         <h5>$160</h5>
                     </div>
-                    <button class="btn btn-block btn-primary font-weight-bold my-3 py-3">Proceed To Checkout</button>
+                    <a href="{{ route('checkout.index') }}" class="btn btn-block btn-primary font-weight-bold my-3 py-3">Proceed To Checkout </a>
                 </div>
             </div>
         </div>
@@ -97,5 +94,26 @@
 </div>
 <!-- Cart End -->
 
-
 <x-footer/>
+
+<script src="{{ asset('js/app.js') }}"></script>
+<script>
+    (function(){
+        const classname = document.querySelectorAll('.quantity')
+
+        Array.from(classname).forEach(function(element) {
+            element.addEventListener('change', function () {
+                const id = element.getAttribute('data-id')
+                axios.patch('/cart/' + id, {
+                    quantity: this.value
+                })
+                    .then(function (response) {
+                        console.log(response);
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    });
+            })
+        })
+    })();
+</script>
