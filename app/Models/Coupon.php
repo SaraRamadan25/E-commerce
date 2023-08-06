@@ -13,23 +13,27 @@ class Coupon extends Model
 
     protected $fillable = [
         'code',
-        'status',
-        'offer_id',
-        'coupon_id',
+        'type',
+        'value',
+        'percent_off',
     ];
 
-    protected $casts = [
-       'code'=>'string',
-    ];
-    public function offers(): BelongsToMany
+
+
+
+    public static function findByCode($code): ?Coupon
     {
-        return $this->belongsToMany(Offer::class);
+        return self::where('code', $code)->first();
     }
 
-    public function checkout(): BelongsTo
+    public function discount($total): float|int
     {
-        return $this->belongsTo(Checkout::class);
+        if ($this->type == 'fixed') {
+            return $this->value;
+        } elseif ($this->type == 'percent') {
+            return round(($this->percent_off / 100) * $total);
+        } else {
+            return 0;
+        }
     }
-
-
 }

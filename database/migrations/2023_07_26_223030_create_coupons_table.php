@@ -14,10 +14,10 @@ return new class extends Migration
 
         Schema::create('coupons', function (Blueprint $table) {
             $table->id();
-            $table->integer('code');
-            $table->string('status')->default('available');
-            $table->foreignId('offer_id')->constrained();
-            $table->foreignId('checkout_id')->constrained();
+            $table->string('code')->unique();
+            $table->string('type');
+            $table->integer('value')->nullable();
+            $table->integer('percent_off')->nullable();
             $table->timestamps();
 
         });

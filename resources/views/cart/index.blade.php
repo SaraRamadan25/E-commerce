@@ -32,27 +32,31 @@
                     <th>Remove</th>
                 </tr>
                 </thead>
+                <h2>{{ Cart::count() }} item(s) in Shopping Cart</h2>
+
                 <tbody class="align-middle">
                 @foreach(Gloudemans\Shoppingcart\Facades\Cart::content() as $item)
                     <tr>
                         <td class="align-middle"><img src="{{ $item->model->image }}" alt="" style="width: 50px;"> <a href="{{ route('product.show',[$item->id]) }}">{{ $item->model->name }}
                             </a>
                         </td>
-                        <td class="align-middle">{{ $item->model->original_price }}</td>
+                        <td class="align-middle">{{'$'. number_format( $item->model->price_after_offer, 2 ) }}</td>
                         <td class="align-middle">
-                            <div class="input-group quantity mx-auto" style="width: 100px;">
-                                <button class="btn btn-sm btn-primary btn-minus" type="button">
-                                    <i class="fa fa-minus"></i>
-                                </button>
-                                <input type="number" class=" quantity" data-id="{{ $item->rowId }}">
-                                <button class="btn btn-sm btn-primary btn-plus" type="button">
-                                    <i class="fa fa-plus"></i>
-                                </button>
-                            </div>
+                            <select class="quantity" data-id="{{ $item->rowId }}">
+                                @for ($i = 1; $i < 5 + 1 ; $i++)
+                                    <option {{ $item->qty == $i ? 'selected' : '' }} value="{{ $i }}">{{ $i }}</option>
+                                @endfor
+                            </select>
+
                         </td>
-                        <td class="align-middle">{{ $item->model->original_price * $item->qty }}</td>
+                        <td class="align-middle">{{ '$'. number_format($item->model->price_after_offer * $item->qty, 2) }}</td>
                         <td class="align-middle">
-                            <button class="btn btn-sm btn-danger"><i class="fa fa-times"></i></button>
+                            <form method="POST" action="{{ route('cart.destroy', $item->rowId) }}">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-sm btn-danger"><i class="fa fa-times"></i></button>
+                            </form>
+
                         </td>
                     </tr>
                 @endforeach
@@ -60,7 +64,8 @@
             </table>
         </div>
         <div class="col-lg-4">
-            <form class="mb-30" action="">
+            <form class="mb-30" action="{{ route('coupon.store') }}" method="post">
+                @csrf
                 <div class="input-group">
                     <input type="text" class="form-control border-0 p-4" placeholder="Coupon Code">
                     <div class="input-group-append">
@@ -74,17 +79,17 @@
                 <div class="border-bottom pb-2">
                     <div class="d-flex justify-content-between mb-3">
                         <h6>Subtotal</h6>
-                        <h6>$150</h6>
+                        <h6>{{ Cart::subtotal() }}</h6>
                     </div>
                     <div class="d-flex justify-content-between">
                         <h6 class="font-weight-medium">Shipping</h6>
-                        <h6 class="font-weight-medium">$10</h6>
+                        <h6 class="font-weight-medium">{{ Cart::tax() }}</h6>
                     </div>
                 </div>
                 <div class="pt-2">
                     <div class="d-flex justify-content-between mt-2">
                         <h5>Total</h5>
-                        <h5>$160</h5>
+                        <h5>{{ Cart::total() }}</h5>
                     </div>
                     <a href="{{ route('checkout.index') }}" class="btn btn-block btn-primary font-weight-bold my-3 py-3">Proceed To Checkout </a>
                 </div>
@@ -103,17 +108,24 @@
 
         Array.from(classname).forEach(function(element) {
             element.addEventListener('change', function () {
-                const id = element.getAttribute('data-id')
-                axios.patch('/cart/' + id, {
-                    quantity: this.value
+                const id = element.getAttribute('data-id');
+                const quantity = element.value;
+                axios.patch(`/cart/${id}`, {
+                    quantity: quantity
                 })
                     .then(function (response) {
                         console.log(response);
+                        window.location.href = '{{ route('cart.index') }}'
                     })
                     .catch(function (error) {
                         console.log(error);
+                        window.location.href = '{{ route('cart.index') }}'
                     });
-            })
-        })
+            });
+        });
+
     })();
+
+</script>
+
 </script>

@@ -91,11 +91,20 @@
             <div class="bg-light p-30 mb-5">
                 <div class="border-bottom">
                     <h6 class="mb-3">Products</h6>
-                    @foreach(Cart::content() as $item)
-                    <div class="d-flex justify-content-between">
-                        <p>{{ $item->model->name }}</p>
-                        <p>{{ $item->model->presentPriceAfterOffer() }}</p>
-                    </div>
+                    @foreach (Cart::content() as $item)
+                        <div class="checkout-table-row">
+                            <div class="checkout-table-row-left">
+                                <img src="{{ asset('img/products/'.$item->model->slug.'.jpg') }}" alt="item" class="checkout-table-img">
+                                <div class="checkout-item-details">
+                                    <div class="checkout-table-item">{{ $item->model->name }}</div>
+                                    <div class="checkout-table-price">{{ $item->model->presentPriceAfterOffer() }}</div>
+                                </div>
+                            </div> <!-- end checkout-table -->
+
+                            <div class="checkout-table-row-right">
+                                <div class="checkout-table-quantity">quantity {{ $item->qty }}</div>
+                            </div>
+                        </div> <!-- end checkout-table-row -->
                     @endforeach
 
                 </div>
@@ -112,7 +121,7 @@
                 <div class="pt-2">
                     <div class="d-flex justify-content-between mt-2">
                         <h5>Total</h5>
-                        <h5>{{ Cart::subtotal() + 10 }}</h5>
+                        <h5>{{ Cart::subtotal() }}</h5>
                     </div>
                 </div>
             </div>
