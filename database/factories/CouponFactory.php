@@ -20,10 +20,10 @@ class CouponFactory extends Factory
     public function definition(): array
     {
         return [
-            'code' => (string) $this->faker->randomNumber(),
+          /*  'code' => (string) $this->faker->randomNumber(),
             'type' => $this->faker->randomElement(['fixed', 'percent']),
             'value' => $this->faker->randomNumber(),
-            'percent_off' => $this->faker->randomNumber(),
+            'percent_off' => $this->faker->randomNumber(),*/
         ];
     }
 }

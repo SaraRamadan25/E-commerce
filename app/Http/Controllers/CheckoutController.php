@@ -26,7 +26,8 @@ class CheckoutController extends Controller
             return $item->model->slug.', '.$item->qty;
         })->values()->toJson();
 
-        try {
+        try
+        {
             $charge = Stripe::charges()->create([
                 'amount' => Cart::total() / 100,
                 'currency' => 'CAD',
@@ -34,15 +35,12 @@ class CheckoutController extends Controller
                 'description' => 'Order',
                 'receipt_email' => $request->email,
                 'metadata' => [
-                    //change to Order ID after we start using DB
                     'contents' => $contents,
                     'quantity' => Cart::instance('default')->count(),
                 ],
             ]);
 
-            // SUCCESSFUL
             Cart::instance('default')->destroy();
-            // return back()->with('success_message', 'Thank you! Your payment has been successfully accepted!');
             return redirect()->route('confirmation.index')->with('success_message', 'Thank you! Your payment has been successfully accepted!');
         } catch (CardErrorException $e) {
             return back()->withErrors('Error! ' . $e->getMessage());

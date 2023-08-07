@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('offers', function (Blueprint $table) {
             $table->id();
-            $table->float('offer_percentage');
+            $table->integer('offer_percentage');
 
             $table->timestamps();
 

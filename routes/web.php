@@ -39,7 +39,7 @@ Route::patch('/cart/{product}', [CartController::class,'update'])->name('cart.up
 Route::delete('/cart/{product}', [CartController::class,'destroy'])->name('cart.destroy');
 
 Route::get('products',[ProductController::class,'index'])->name('products.index');
-Route::get('products/{product}',[ProductController::class,'show'])->name('product.show');
+Route::get('products/{product}',[ProductController::class,'show'])->name('products.show');
 Route::post('products',[ProductController::class,'store'])->name('products.store');
 
 Route::get('checkout',[CheckoutController::class,'index'])->name('checkout.index');

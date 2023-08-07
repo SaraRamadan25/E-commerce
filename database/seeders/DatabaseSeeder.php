@@ -26,7 +26,6 @@ class DatabaseSeeder extends Seeder
         Category::factory()->create();
         Checkout::factory()->create();
         Contact::factory()->create();
-        Coupon::factory()->create();
         Faq::factory()->create();
         Offer::factory()->create();
         Subscriber::factory()->create();
@@ -35,8 +34,17 @@ class DatabaseSeeder extends Seeder
         Product::factory()->create();
         Review::factory()->create();
 
+Coupon::factory()->create([
+            'code' => 'ABC123',
+            'type' => 'fixed',
+            'value' => 30,
+        ]);
 
-
+        Coupon::factory()->create([
+            'code' => 'DEF456',
+            'type' => 'percent',
+            'percent_off' => 50,
+        ]);
 
         // \App\Models\User::factory()->create([
         //     'name' => 'Test User',

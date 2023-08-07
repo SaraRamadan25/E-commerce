@@ -17,7 +17,7 @@ class OfferFactory extends Factory
     public function definition(): array
     {
         return [
-            'offer_percentage' => $this->faker->randomFloat(2, 0, 100),
+            'offer_percentage' => $this->faker->numberBetween(5,25),
 
         ];
     }

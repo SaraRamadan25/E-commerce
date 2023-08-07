@@ -12,6 +12,7 @@ use Illuminate\Foundation\Application;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Validator;
 
 class CartController extends Controller
@@ -21,8 +22,12 @@ class CartController extends Controller
      */
     public function index(): View|Application|Factory
     {
-        $products = Product::all();
-        return view('cart.index', compact('products'));
+        return view('cart.index')->with([
+            'discount' => $this->getNumbers()->get('discount'),
+            'newSubtotal' => $this->getNumbers()->get('newSubtotal'),
+            'newTax' => $this->getNumbers()->get('newTax'),
+            'newTotal' => $this->getNumbers()->get('newTotal'),
+        ]);
     }
 
     public function store(ProductRequest $request): RedirectResponse
@@ -50,7 +55,9 @@ class CartController extends Controller
         $validator = Validator::make($request->all(), [
             'quantity' => 'required|numeric|between:1,5'
         ]);
-        if ($validator->fails()) {
+
+        if ($validator->fails())
+        {
             session()->flash('errors', collect(['Quantity must be between 1 and 5.']));
             return response()->json(['success' => false], 400);
         }
@@ -59,4 +66,26 @@ class CartController extends Controller
         session()->flash('success_message', 'Quantity updated successfully!');
         return response()->json(['success' => true]);
     }
+
+    private function getNumbers(): Collection
+    {
+        $tax = config('cart.tax') / 100;
+        $discount = session()->get('coupon')['discount'] ?? 0;
+
+        // Ensure $discount is a numeric value
+        $discount = is_numeric($discount) ? $discount : 0;
+
+        $newSubtotal = (Cart::subtotal() - $discount);
+        $newTax = $newSubtotal * $tax;
+        $newTotal = $newSubtotal * (1 + $tax);
+
+        return collect([
+            'tax' => $tax,
+            'discount' => $discount,
+            'newSubtotal' => $newSubtotal,
+            'newTax' => $newTax,
+            'newTotal' => $newTotal,
+        ]);
+    }
+
 }

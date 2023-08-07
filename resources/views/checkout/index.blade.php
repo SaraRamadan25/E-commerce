@@ -92,19 +92,13 @@
                 <div class="border-bottom">
                     <h6 class="mb-3">Products</h6>
                     @foreach (Cart::content() as $item)
-                        <div class="checkout-table-row">
-                            <div class="checkout-table-row-left">
-                                <img src="{{ asset('img/products/'.$item->model->slug.'.jpg') }}" alt="item" class="checkout-table-img">
-                                <div class="checkout-item-details">
-                                    <div class="checkout-table-item">{{ $item->model->name }}</div>
-                                    <div class="checkout-table-price">{{ $item->model->presentPriceAfterOffer() }}</div>
-                                </div>
-                            </div> <!-- end checkout-table -->
+                           <div class="d-flex justify-content-between mb-3">
+                                <h6>{{ $item->model->name }}</h6>
+                               <h6> <img src="{{ $item->model->image }}" alt="Product Image" style="width: 50px;">
+                               </h6>
 
-                            <div class="checkout-table-row-right">
-                                <div class="checkout-table-quantity">quantity {{ $item->qty }}</div>
+                               <h6>{{ presentPrice($item->model->price_after_offer)  }}</h6>
                             </div>
-                        </div> <!-- end checkout-table-row -->
                     @endforeach
 
                 </div>
@@ -114,14 +108,14 @@
                         <h6>   {{ (Cart::subtotal()) }}</h6>
                     </div>
                     <div class="d-flex justify-content-between">
-                        <h6 class="font-weight-medium">Shipping</h6>
-                        <h6 class="font-weight-medium">$10</h6>
+                        <h6 class="font-weight-medium">Tax</h6>
+                        <h6 class="font-weight-medium">{{ Cart::tax() }}</h6>
                     </div>
                 </div>
                 <div class="pt-2">
                     <div class="d-flex justify-content-between mt-2">
                         <h5>Total</h5>
-                        <h5>{{ Cart::subtotal() }}</h5>
+                        <h5>{{ Cart::total() }}</h5>
                     </div>
                 </div>
             </div>

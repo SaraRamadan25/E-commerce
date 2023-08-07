@@ -12,15 +12,20 @@ class CouponController extends Controller
     public function store(Request $request): RedirectResponse
     {
         $coupon = Coupon::where('code', $request->code)->first();
-        if (!$coupon) {
-            return back()->withErrors('Invalid coupon code. Please try again.');
+
+        if (!$coupon)
+        {
+            return back()->withErrors(['coupon_code' => 'Invalid coupon code. Please try again.']);
         }
+
         session()->put('coupon', [
             'name' => $coupon->code,
             'discount' => $coupon->discount(Cart::subtotal()),
         ]);
-        return back()->with('success_message', 'Coupon has been applied!');
+
+        return redirect()->route('checkout.index')->with('success_message', 'Coupon has been applied!');
     }
+
 
     public function destroy(): RedirectResponse
     {

@@ -19,7 +19,6 @@ return new class extends Migration
             $table->integer('value')->nullable();
             $table->integer('percent_off')->nullable();
             $table->timestamps();
-
         });
 
     }

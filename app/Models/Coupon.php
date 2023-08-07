@@ -18,22 +18,22 @@ class Coupon extends Model
         'percent_off',
     ];
 
-
-
-
     public static function findByCode($code): ?Coupon
     {
         return self::where('code', $code)->first();
     }
 
-    public function discount($total): float|int
+    public function discount($total)
     {
-        if ($this->type == 'fixed') {
+        if ($this->type == 'fixed')
+        {
             return $this->value;
-        } elseif ($this->type == 'percent') {
-            return round(($this->percent_off / 100) * $total);
-        } else {
-            return 0;
         }
+        elseif ($this->type == 'percentage')
+        {
+            return round($this->offer->offer_percentage / 100) * $total;
+        }
+        else
+            return 0;
     }
 }
