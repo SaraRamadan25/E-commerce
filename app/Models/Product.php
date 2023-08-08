@@ -44,16 +44,20 @@ class Product extends Model
         return $this->hasMany(Review::class);
     }
 
-
-    public function presentOriginalPrice(): string
+    public function scopeFilter($query , array $filters): void
     {
-        return '$' . number_format($this->original_price, 2);
+        $query->when($filters['search'] ?? false, fn($query, $search) =>
+        $query->where('name', 'like', '%' . request('search') . '%')
+            ->orwhere('description', 'like', '%' . request('search') . '%')
+            ->orwhere('details', 'like', '%' . request('search') . '%'));
+
+
+        $query->when($filters['category'] ?? false , fn($query,$category) =>
+        $query->whereExists(fn($query)=>
+        $query->from('categories')
+        ->whereColumn('categories.id','products.category_id')
+        ->where('categories.slug',$category))
+        );
+
     }
-
-    public function presentPriceAfterOffer(): string
-    {
-        return '$' . number_format($this->price_after_offer, 2);
-    }
-
-
 }

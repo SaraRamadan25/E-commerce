@@ -72,7 +72,7 @@
                 <form class="mb-30" action="{{ route('coupon.store') }}" method="post">
                     @csrf
                     <div class="input-group">
-                        <input type="text" name="coupon_code" id="coupon_code" class="form-control border-0 p-4" placeholder="Coupon Code">
+                        <input type="text" name="code" id="code" class="form-control border-0 p-4" placeholder="Coupon Code">
                         <div class="input-group-append">
                             <button class="btn btn-primary">Apply Coupon</button>
                         </div>

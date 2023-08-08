@@ -8,6 +8,7 @@ use App\Http\Controllers\CouponController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\StripeController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -48,6 +49,7 @@ Route::post('checkout',[CheckoutController::class,'store'])->name('checkout.stor
 Route::post('coupon',[CouponController::class,'store'])->name('coupon.store');
 Route::delete('coupon',[CouponController::class,'destroy'])->name('coupon.destroy');
 
+Route::post('payment', [StripeController::class, 'store'])->name('payment.store');
 
 Route::get('detail',function (){
     return view('detail');

@@ -5,31 +5,26 @@ namespace App\Http\Controllers;
 use App\Http\Requests\ProductRequest;
 use App\Models\Cart;
 use App\Models\Product;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
+use Illuminate\Foundation\Application;
 use Illuminate\Http\Request;
 
 class ProductController extends Controller
 {
-    public function index(): \Illuminate\Contracts\View\View|\Illuminate\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\Foundation\Application
+    public function index(): View|Application|Factory
     {
-        $products = Product::latest()->paginate(6);
+        $products = Product::latest()
+            ->filter(request(['search','category']))
+            ->paginate(6);
 
         return view('products.index',compact('products'));
     }
 
-    public function show(Product $product): \Illuminate\Contracts\View\View|\Illuminate\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\Foundation\Application
+    public function show(Product $product): View|Application|Factory
     {
-        $products = Product::all();
-        return view('products.show', compact('products','product'));
+        return view('products.show', compact('product'));
     }
 
-   /* public function store(ProductRequest $request){
-        $product = Product::findOrFail($request->input('id'));
-        Cart::add(
-            $product->id,
-            $product->name,
-            $product->quantity,
-            $product->price_after_offer,
-        )->associate('Product');
-        return redirect()->route('products.index')->with('message', 'Successfully added');
-    }*/
+
 }

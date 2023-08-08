@@ -1,7 +1,6 @@
 <x-head />
-<x-breadcrumbs :title="'Checkout'" />
 
-<script src="https://js.stripe.com/v10/"></script>
+<x-breadcrumbs :title="'Checkout'" />
 
 @if (session()->has('success_message'))
     <div class="spacer"></div>
@@ -20,7 +19,7 @@
         </ul>
     </div>
 @endif
-<!-- Checkout Start -->
+
 <div class="container-fluid">
     <div class="row px-xl-5">
         <div class="col-lg-8">
@@ -53,11 +52,6 @@
                     </div>
                     <div class="col-md-6 form-group">
                         <label>Country</label>
-                    {{--    <select name="country" class="custom-select">
-                            @foreach($countries as $country)
-                            <option>{{ $country }}</option>
-                        </select>
-                        @endforeach--}}
                     </div>
                     <div class="col-md-6 form-group">
                         <label>City</label>
@@ -88,19 +82,18 @@
         </div>
         <div class="col-lg-4">
             <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">Order Total</span></h5>
+
             <div class="bg-light p-30 mb-5">
                 <div class="border-bottom">
                     <h6 class="mb-3">Products</h6>
                     @foreach (Cart::content() as $item)
-                           <div class="d-flex justify-content-between mb-3">
-                                <h6>{{ $item->model->name }}</h6>
-                               <h6> <img src="{{ $item->model->image }}" alt="Product Image" style="width: 50px;">
-                               </h6>
-
-                               <h6>{{ presentPrice($item->model->price_after_offer)  }}</h6>
-                            </div>
+                        <div class="d-flex justify-content-between mb-3">
+                            <h6>{{ $item->model->name }}</h6>
+                            <h6> <img src="{{ $item->model->image }}" alt="Product Image" style="width: 50px;">
+                            </h6>
+                            <h6>{{ presentPrice($item->model->price_after_offer) }}</h6>
+                        </div>
                     @endforeach
-
                 </div>
                 <div class="border-bottom pt-3 pb-2">
                     <div class="d-flex justify-content-between mb-3">
@@ -120,65 +113,69 @@
                 </div>
             </div>
 
-            <label for="name_on_card">Name on Card</label>
-            <input type="text" class="form-control" id="name_on_card" name="name_on_card" value="">
-        </div>
-
-
-        <div class="form-group">
-            <label for="cc-number">Credit Card Number</label>
-            <input type="text" class="form-control" id="cc-number" name="cc-number" value="">
-        </div>
-
-        <div class="half-form">
-            <div class="form-group">
-                <label for="expiry">Expiry</label>
-                <input type="text" class="form-control" id="expiry" name="expiry" placeholder="MM/DD">
+        <form action="{{ route('payment.store') }}" method="POST" id="payment-form">
+            @csrf
+            <div class="mb-3">
+                <label for="card-name" class="inline-block font-bold mb-2 uppercase text-sm tracking-wider">Your name</label>
+                <input type="text" name="name" id="card-name" class="border-2 border-gray-200 h-11 px-4 rounded-xl w-full">
             </div>
-            <div class="form-group">
-                <label for="card-element">Credit or debit card</label>
-                <div id="card-element">
-                    <!-- a Stripe Element will be inserted here. -->
+            <div class="mb-3">
+                <label for="email" class="inline-block font-bold mb-2 uppercase text-sm tracking-wider">Email</label>
+                <input type="email" name="email" id="email" class="border-2 border-gray-200 h-11 px-4 rounded-xl w-full">
+            </div>
+            <div class="mb-3">
+                <label for="payment-method" class="inline-block font-bold mb-2 uppercase text-sm tracking-wider">Payment Method</label>
+                <div>
+                    <input type="radio" name="payment_method" id="card" value="card" checked>
+                    <label for="card">Credit Card</label>
+                </div>
+                <div>
+                    <input type="radio" name="payment_method" id="paypal" value="paypal">
+                    <label for="paypal">PayPal</label>
                 </div>
             </div>
-            <div class="form-group">
-                <label for="cvc">CVC Code</label>
-                <input type="text" class="form-control" id="cvc" name="cvc" value="">
-            </div>
-        </div>
-
-
-        <div class="mb-5">
-                <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">Payment</span></h5>
-                <div class="bg-light p-30">
-                    <div class="form-group">
-                        <div class="custom-control custom-radio">
-                            <input type="radio" class="custom-control-input" name="payment" id="paypal">
-                            <label class="custom-control-label" for="paypal">Paypal</label>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="custom-control custom-radio">
-                            <input type="radio" class="custom-control-input" name="payment" id="directcheck">
-                            <label class="custom-control-label" for="directcheck">Direct Check</label>
-                        </div>
-                    </div>
-                    <div class="form-group mb-4">
-                        <div class="custom-control custom-radio">
-                            <input type="radio" class="custom-control-input" name="payment" id="banktransfer">
-                            <label class="custom-control-label" for="banktransfer">Bank Transfer</label>
-                        </div>
-                    </div>
-                    <button class="btn btn-block btn-primary font-weight-bold py-3">Place Order</button>
+            <div class="mb-3">
+                <label for="card" class="inline-block font-bold mb-2 uppercase text-sm tracking-wider">Card details</label>
+                <div class="bg-gray-100 p-6 rounded-xl">
+                    <div id="card-element"></div>
                 </div>
             </div>
-        </div>
+            <a href="{{ route('payment.store') }}"><button type="submit" class="w-full bg-indigo-500 uppercase rounded-xl font-extrabold text-white px-6 h-12">Pay 👉</button></a>
+        </form>
     </div>
 </div>
-<!-- Checkout End -->
+
+<script src="https://js.stripe.com/v3/"></script>
+<script>
+    const stripe = Stripe('{{ env("STRIPE_KEY") }}');
+    const elements = stripe.elements();
+    const cardElement = elements.create('card');
+
+    cardElement.mount('#card-element');
+
+    const form = document.getElementById('payment-form');
+    form.addEventListener('submit', async (event) => {
+        event.preventDefault();
+
+        const { paymentMethod, error } = await stripe.createPaymentMethod({
+            type: 'card',
+            card: cardElement,
+            billing_details: {
+            }
+        });
+
+        if (error) {
+        } else {
+            const paymentMethodInput = document.createElement('input');
+            paymentMethodInput.setAttribute('type', 'hidden');
+            paymentMethodInput.setAttribute('name', 'payment_method');
+            paymentMethodInput.setAttribute('value', paymentMethod.id);
+            form.appendChild(paymentMethodInput);
+
+            form.submit();
+        }
+    });
+</script>
 
 
 <x-footer />
-
-
-
