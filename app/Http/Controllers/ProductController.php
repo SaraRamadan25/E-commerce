@@ -23,7 +23,8 @@ class ProductController extends Controller
 
     public function show(Product $product): View|Application|Factory
     {
-        return view('products.show', compact('product'));
+        $products = Product::all();
+        return view('products.show', compact('product','products'));
     }
 
 

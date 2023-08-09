@@ -130,19 +130,14 @@
                 <div class="product-item bg-light mb-4">
                     <div class="product-img position-relative overflow-hidden">
                         <img class="img-fluid w-100" src="{{ $featured_product->image_url }}" alt="">
-                        <form action="{{ route('cart.store') }}" method="POST">
-                            @csrf
-                            <input type="hidden" name="id" value="{{ $featured_product->id }}">
-                            <input type="hidden" name="name" value="{{ $featured_product->name }}">
-                            <input type="hidden" name="price" value="{{ $featured_product->price }}">
-                            <button type="submit" class="button button-plain">Add to Cart</button>
-                        </form>
+
                     </div>
                     <div class="text-center py-4">
-                        <a class="h6 text-decoration-none text-truncate" href="">{{ $featured_product->name }}</a>
+                        <a class="h6 text-decoration-none text-truncate" href="{{ route('products.show', ['product' => $featured_product->id]) }}">{{ $featured_product->name }}</a>
                         <div class="d-flex align-items-center justify-content-center mt-2">
-                            <h5>{{ $featured_product->presentOriginalPrice() }}</h5>
-                            <h6 class="text-muted ml-2"><del>{{ $featured_product->presentPriceAfterOffer() }}</del></h6>
+                            <h5>{{ presentPrice($featured_product->original_price) }}</h5>
+
+                            <h6 class="text-muted ml-2"><del>{{ presentPrice($featured_product->price_after_offer) }}</del></h6>
                         </div>
                         <div class="d-flex align-items-center justify-content-center mb-1">
                             <small class="fa fa-star text-primary mr-1"></small>
@@ -196,10 +191,10 @@
                 <div class="product-item bg-light mb-4">
                     <!-- ... (rest of the code) ... -->
                     <div class="text-center py-4">
-                        <a class="h6 text-decoration-none text-truncate" href="">{{ $recent_product->name }}</a>
+                        <a class="h6 text-decoration-none text-truncate" href="{{ route('products.show', ['product' => $recent_product->id]) }}">{{ $recent_product->name }}</a>
                         <div class="d-flex align-items-center justify-content-center mt-2">
-                            <h5>{{ $recent_product->presentOriginalPrice() }}</h5>
-                            <h6 class="text-muted ml-2"><del>{{ $recent_product->presentPriceAfterOffer() }}</del></h6>
+                            <h5>{{ presentPrice($recent_product->original_price) }}</h5>
+                            <h6 class="text-muted ml-2"><del>{{ presentPrice($recent_product->price_after_offer) }}</del></h6>
                         </div>
                         <div class="d-flex align-items-center justify-content-center mb-1">
                             <small class="fa fa-star text-primary mr-1"></small>

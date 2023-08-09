@@ -26,18 +26,7 @@
             <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">Billing Address</span></h5>
             <div class="bg-light p-30 mb-5">
                 <div class="row">
-                    <div class="col-md-6 form-group">
-                        <label>First Name</label>
-                        <input name="first_name" class="form-control" type="text" placeholder="John">
-                    </div>
-                    <div class="col-md-6 form-group">
-                        <label>Last Name</label>
-                        <input name="last_name" class="form-control" type="text" placeholder="Doe">
-                    </div>
-                    <div class="col-md-6 form-group">
-                        <label>E-mail</label>
-                        <input name="email" class="form-control" type="text" placeholder="example@email.com">
-                    </div>
+
                     <div class="col-md-6 form-group">
                         <label>Mobile No</label>
                         <input name="mobile" class="form-control" type="text" placeholder="+123 456 789">
@@ -52,19 +41,32 @@
                     </div>
                     <div class="col-md-6 form-group">
                         <label>Country</label>
+                        <select name="country" class="form-control">
+                            @foreach($countries as $country)
+                                <option value="{{ $country }}">{{ $country }}</option>
+                            @endforeach
+                        </select>
                     </div>
+
                     <div class="col-md-6 form-group">
                         <label>City</label>
-                        <input class="form-control" type="text" placeholder="New York">
+                        <select name="city" class="form-control">
+                            @foreach($cities as $city)
+                                <option value="{{ $city }}">{{ $city }}</option>
+                            @endforeach
+                        </select>
                     </div>
+
                     <div class="col-md-6 form-group">
                         <label>State</label>
-                        <input class="form-control" type="text" placeholder="New York">
+                        <select name="state" class="form-control">
+                            @foreach($states as $state)
+                                <option value="{{ $state }}">{{ $state }}</option>
+                            @endforeach
+                        </select>
                     </div>
-                    <div class="col-md-6 form-group">
-                        <label>ZIP Code</label>
-                        <input name="zip_code" class="form-control" type="text" placeholder="123">
-                    </div>
+
+
                     <div class="col-md-12 form-group">
                         <div class="custom-control custom-checkbox">
                             <input type="checkbox" class="custom-control-input" id="newaccount">

@@ -49,8 +49,7 @@ class Product extends Model
         $query->when($filters['search'] ?? false, fn($query, $search) =>
         $query->where('name', 'like', '%' . request('search') . '%')
             ->orwhere('description', 'like', '%' . request('search') . '%')
-            ->orwhere('details', 'like', '%' . request('search') . '%'));
-
+        );
 
         $query->when($filters['category'] ?? false , fn($query,$category) =>
         $query->whereExists(fn($query)=>

@@ -3,10 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\CheckoutRequest;
+use App\Models\Checkout;
 use App\Models\Product;
 use Cartalyst\Stripe\Exception\CardErrorException;
 use Cartalyst\Stripe\Laravel\Facades\Stripe;
 use Gloudemans\Shoppingcart\Facades\Cart;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 
 
@@ -16,11 +18,14 @@ class CheckoutController extends Controller
     {
         $products = Product::all();
         $subtotal = Cart::subtotal();
-        return view('checkout.index',compact('products','subtotal'));
+        $countries = Checkout::pluck('country');
+        $states = Checkout::pluck('state');
+        $cities = Checkout::pluck('city');
+        return view('checkout.index',compact('products','subtotal','countries','states','cities'));
 
     }
 
-    public function store(CheckoutRequest $request)
+    public function store(CheckoutRequest $request): RedirectResponse
     {
         $contents = Cart::content()->map(function ($item) {
             return $item->model->slug.', '.$item->qty;
