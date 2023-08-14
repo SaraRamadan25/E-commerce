@@ -3,12 +3,14 @@
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CheckoutController;
+use App\Http\Controllers\ConfirmationController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\CouponController;
 use App\Http\Controllers\FaqController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ShopController;
 use App\Http\Controllers\StripeController;
 use Illuminate\Support\Facades\Route;
 
@@ -44,21 +46,20 @@ Route::get('products',[ProductController::class,'index'])->name('products.index'
 Route::get('products/{product}',[ProductController::class,'show'])->name('products.show');
 Route::post('products',[ProductController::class,'store'])->name('products.store');
 
-Route::get('checkout',[CheckoutController::class,'index'])->name('checkout.index');
-Route::post('checkout',[CheckoutController::class,'store'])->name('checkout.store');
 
 Route::post('coupon',[CouponController::class,'store'])->name('coupon.store');
 Route::delete('coupon',[CouponController::class,'destroy'])->name('coupon.destroy');
 
-Route::post('payment', [StripeController::class, 'store'])->name('payment.store');
+Route::get('checkout',[CheckoutController::class,'index'])->name('checkout.index');
+Route::post('checkout',[CheckoutController::class,'store'])->name('checkout.store');
+
+Route::get('thankyou', [ConfirmationController::class,'index'])->name('confirmation.index');
 
 Route::get('detail',function (){
     return view('detail');
 });
 
-Route::get('shop',function (){
-    return view('shop.index');
-});
+Route::get('shop',[ShopController::class,'index'])->name('shop.index');
 
 
 Route::get('faq', [FaqController::class, 'index'])->name('faq.index');

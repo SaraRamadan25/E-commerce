@@ -27,7 +27,7 @@
                     </div>
                     <small class="pt-1">{{ $product->reviews->count() }}</small>
                 </div>
-                <h3 class="font-weight-semi-bold mb-4">{{ $product->original_price }}</h3>
+                <h3 class="font-weight-semi-bold mb-4">{{ $product->price_after_offer }}</h3>
                 <p class="mb-4">{{ $product->description }}</p>
                 <div class="d-flex mb-3">
                     <strong class="text-dark mr-3">Sizes:</strong>
@@ -82,7 +82,7 @@
                         @csrf
                         <input type="hidden" name="id" value="{{ $product->id }}">
                         <input type="hidden" name="name" value="{{ $product->name }}">
-                        <input type="hidden" name="price" value="{{ $product->original_price }}">
+                        <input type="hidden" name="price" value="{{ $product->price_after_offer }}">
                         <button type="submit" class="btn btn-primary px-3"><i class="fa fa-shopping-cart mr-1"></i> Add To
                             Cart
                         </button>
@@ -212,7 +212,7 @@
                             <div class="d-flex align-items-center justify-content-center mt-2">
                                 <h5>{{ $product->price_after_offer }}</h5>
                                 <h6 class="text-muted ml-2">
-                                    <del>{{ $product->original_price }}</del>
+                                    <del>{{ $product->price_after_offer }}</del>
                                 </h6>
                             </div>
                             <div class="d-flex align-items-center justify-content-center mb-1">

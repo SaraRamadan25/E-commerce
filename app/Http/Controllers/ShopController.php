@@ -3,32 +3,48 @@
 namespace App\Http\Controllers;
 
 use App\Models\Product;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
+use Illuminate\Foundation\Application;
 use Illuminate\Http\Request;
 
 class ShopController extends Controller
 {
-    public function index(Request $request): \Illuminate\Contracts\View\View|\Illuminate\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\Foundation\Application
+    public function index(Request $request): View|Application|Factory
     {
-        $products = Product::query();
+        $priceRanges = [
+            ['min' => 0, 'max' => 100],
+            ['min' => 100, 'max' => 200],
+            ['min' => 200, 'max' => 300],
+            ['min' => 300, 'max' => 400],
+            ['min' => 400, 'max' => 500],
+        ];
 
-        if ($request->has('size')) {
-            $products->where('size', $request->input('size'));
+        $colors = [
+            'red', 'blue', 'green', 'yellow', 'black', 'white'
+        ];
+
+        $sizes = [
+            'small', 'medium', 'large', 'xlarge'
+        ];
+
+        $productsQuery = Product::query();
+
+        if ($request->has('price')) {
+            $priceFilter = $request->input('price');
         }
 
-        if ($request->has('color')) {
-            $products->where('color', $request->input('color'));
+
+        $filteredProducts = $productsQuery->get();
+        $productCountsByPriceRange = [];
+        foreach ($priceRanges as $range)
+        {
+            $count = $filteredProducts->whereBetween('price_after_offer', [$range['min'], $range['max']])->count();
+            $productCountsByPriceRange[] = ['range' => $range, 'count' => $count];
         }
 
-        if ($request->has('min_price')) {
-            $products->where('price', '>=', $request->input('min_price'));
-        }
+        $products = $productsQuery->paginate(9);
 
-        if ($request->has('max_price')) {
-            $products->where('price', '<=', $request->input('max_price'));
-        }
-
-        $filteredProducts = $products->get();
-
-        return view('shop.index', compact('filteredProducts'));
+        return view('shop.index', compact('products', 'priceRanges', 'productCountsByPriceRange', 'colors','sizes'));
     }
 }

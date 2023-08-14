@@ -3,41 +3,46 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\CheckoutRequest;
-use App\Models\Checkout;
+use App\Models\City;
+use App\Models\Country;
 use App\Models\Product;
-use Cartalyst\Stripe\Exception\CardErrorException;
-use Cartalyst\Stripe\Laravel\Facades\Stripe;
+use App\Models\State;
 use Gloudemans\Shoppingcart\Facades\Cart;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
+use Illuminate\Foundation\Application;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
+use Stripe\Exception\CardException;
+use Stripe\StripeClient;
 
 
 class CheckoutController extends Controller
 {
-    public function index()
+    public function index(): View|Application|Factory
     {
         $products = Product::all();
         $subtotal = Cart::subtotal();
-        $countries = Checkout::pluck('country');
-        $states = Checkout::pluck('state');
-        $cities = Checkout::pluck('city');
+        $countries = Country::all();
+        $states = State::all();
+        $cities = City::all();
         return view('checkout.index',compact('products','subtotal','countries','states','cities'));
-
     }
 
     public function store(CheckoutRequest $request): RedirectResponse
     {
         $contents = Cart::content()->map(function ($item) {
-            return $item->model->slug.', '.$item->qty;
+            return $item->model->name.','.$item->qty;
         })->values()->toJson();
 
-        try
-        {
-            $charge = Stripe::charges()->create([
-                'amount' => Cart::total() / 100,
-                'currency' => 'CAD',
-                'source' => $request->stripeToken,
-                'description' => 'Order',
+        try {
+            $stripe = new StripeClient(env('STRIPE_SECRET'));
+
+            $stripe->paymentIntents->create([
+                'amount' => intval(Cart::total() * 100),
+                'currency' => 'usd',
+                'payment_method' => $request->payment_method,
+                'description' => 'Demo payment with stripe',
+                'confirm' => true,
                 'receipt_email' => $request->email,
                 'metadata' => [
                     'contents' => $contents,
@@ -46,10 +51,13 @@ class CheckoutController extends Controller
             ]);
 
             Cart::instance('default')->destroy();
-            return redirect()->route('confirmation.index')->with('success_message', 'Thank you! Your payment has been successfully accepted!');
-        } catch (CardErrorException $e) {
-            return back()->withErrors('Error! ' . $e->getMessage());
+
+            return redirect()->route('confirmation.index')->with('message',
+                'Thank You! Your payment has been successfully accepted!');
+
+        } catch (CardException $e) {
+            return back()->withErrors('Error! '.$e->getMessage());
         }
 
-}
+    }
 }
