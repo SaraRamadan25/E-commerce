@@ -23,9 +23,9 @@ class ProductController extends Controller
 
     public function show(Product $product): View|Application|Factory
     {
+        $maylike = Product::where('id','!=',$product->id)->inRandomOrder()->take(4)->get();
         $products = Product::all();
-        return view('products.show', compact('product','products'));
+        return view('products.show', compact('product','products','maylike'));
     }
-
 
 }

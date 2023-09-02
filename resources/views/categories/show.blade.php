@@ -1,4 +1,4 @@
-<!-- show.blade.php -->
+<!-- detail.blade.php -->
 
 <x-head />
 

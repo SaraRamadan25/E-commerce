@@ -6,10 +6,12 @@ use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\ConfirmationController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\CouponController;
+use App\Http\Controllers\DetailController;
 use App\Http\Controllers\FaqController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\ShopController;
 use App\Http\Controllers\StripeController;
 use Illuminate\Support\Facades\Route;
@@ -55,14 +57,15 @@ Route::post('checkout',[CheckoutController::class,'store'])->name('checkout.stor
 
 Route::get('thankyou', [ConfirmationController::class,'index'])->name('confirmation.index');
 
-Route::get('detail',function (){
-    return view('detail');
-});
+Route::get('faq', [FaqController::class, 'index'])->name('faq.index');
 
 Route::get('shop',[ShopController::class,'index'])->name('shop.index');
+Route::get('/shop/filter/{color?}/{size?}/{priceRange?}', [ShopController::class, 'filter'])->name('shop.filter');
 
 
-Route::get('faq', [FaqController::class, 'index'])->name('faq.index');
+Route::post('products/{product}/rate',[ProductController::class, 'rate'])->name('products.rate');
+
+Route::post('products/{product_id}/review', [ReviewController::class, 'store'])->name('review.store');
 
 Route::get('/dashboard', function () {
     return view('dashboard');
