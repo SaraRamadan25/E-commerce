@@ -38,7 +38,7 @@ class CheckoutController extends Controller
             $stripe = new StripeClient(env('STRIPE_SECRET'));
 
             $stripe->paymentIntents->create([
-                'amount' => intval(Cart::total() * 100),
+                'amount' => (Cart::total() * 100),
                 'currency' => 'usd',
                 'payment_method' => $request->payment_method,
                 'description' => 'Demo payment with stripe',

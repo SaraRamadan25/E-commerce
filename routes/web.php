@@ -60,7 +60,7 @@ Route::get('thankyou', [ConfirmationController::class,'index'])->name('confirmat
 Route::get('faq', [FaqController::class, 'index'])->name('faq.index');
 
 Route::get('shop',[ShopController::class,'index'])->name('shop.index');
-Route::get('/shop/filter/{color?}/{size?}/{priceRange?}', [ShopController::class, 'filter'])->name('shop.filter');
+Route::get('/shop/filter', [ShopController::class,'filter'])->name('shop.filter');
 
 
 Route::post('products/{product}/rate',[ProductController::class, 'rate'])->name('products.rate');
