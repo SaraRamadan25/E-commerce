@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\OrderConfirmation;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Foundation\Application;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 
 class ConfirmationController extends Controller
 {
@@ -15,4 +18,5 @@ class ConfirmationController extends Controller
         }
         return view('thankyou');
     }
+
 }

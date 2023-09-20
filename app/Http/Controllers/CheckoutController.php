@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\CheckoutRequest;
+use App\Mail\OrderConfirmation;
 use App\Models\City;
 use App\Models\Country;
 use App\Models\Product;
@@ -11,9 +12,8 @@ use Gloudemans\Shoppingcart\Facades\Cart;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Foundation\Application;
-use Illuminate\Http\RedirectResponse;
-use Stripe\Exception\CardException;
-use Stripe\StripeClient;
+use Illuminate\Support\Facades\Mail;
+
 
 
 class CheckoutController extends Controller
@@ -27,37 +27,19 @@ class CheckoutController extends Controller
         $cities = City::all();
         return view('checkout.index',compact('products','subtotal','countries','states','cities'));
     }
-
-    public function store(CheckoutRequest $request): RedirectResponse
+    public function store(CheckoutRequest $request): View|Application|Factory
     {
-        $contents = Cart::content()->map(function ($item) {
-            return $item->model->name.','.$item->qty;
-        })->values()->toJson();
+        $cartContents = Cart::content();
 
-        try {
-            $stripe = new StripeClient(env('STRIPE_SECRET'));
-
-            $stripe->paymentIntents->create([
-                'amount' => (Cart::total() * 100),
-                'currency' => 'usd',
-                'payment_method' => $request->payment_method,
-                'description' => 'Demo payment with stripe',
-                'confirm' => true,
-                'receipt_email' => $request->email,
-                'metadata' => [
-                    'contents' => $contents,
-                    'quantity' => Cart::instance('default')->count(),
-                ],
-            ]);
-
-            Cart::instance('default')->destroy();
-
-            return redirect()->route('confirmation.index')->with('message',
-                'Thank You! Your payment has been successfully accepted!');
-
-        } catch (CardException $e) {
-            return back()->withErrors('Error! '.$e->getMessage());
+        $orderDetails = [];
+        foreach ($cartContents as $item) {
+            $orderDetails[] = [
+                'content' => $item->name,
+                'quantity' => $item->qty,
+            ];
         }
 
-    }
-}
+        Mail::to($request->email)->send(new OrderConfirmation($orderDetails));
+
+        return view('thankyou', compact('orderDetails'));
+    }    }

@@ -3,12 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ProductRequest;
+use App\Mail\OrderConfirmation;
 use App\Models\Cart;
 use App\Models\Product;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Foundation\Application;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 
 class ProductController extends Controller
 {
@@ -27,5 +29,6 @@ class ProductController extends Controller
         $products = Product::all();
         return view('products.show', compact('product','products','maylike'));
     }
+
 
 }

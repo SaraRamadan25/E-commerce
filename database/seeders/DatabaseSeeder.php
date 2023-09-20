@@ -6,12 +6,15 @@ namespace Database\Seeders;
 use App\Models\Cart;
 use App\Models\Category;
 use App\Models\Checkout;
+use App\Models\City;
 use App\Models\Contact;
+use App\Models\Country;
 use App\Models\Coupon;
 use App\Models\Faq;
 use App\Models\Offer;
 use App\Models\Product;
 use App\Models\Review;
+use App\Models\State;
 use App\Models\Subscriber;
 use App\Models\User;
 use Illuminate\Database\Seeder;
@@ -33,6 +36,9 @@ class DatabaseSeeder extends Seeder
         Cart::factory()->create();
         Product::factory()->create();
         Review::factory()->create();
+        Country::factory()->create();
+        State::factory()->create();
+        City::factory()->create();
 
 Coupon::factory()->create([
             'code' => 'ABC123',
@@ -45,6 +51,8 @@ Coupon::factory()->create([
             'type' => 'percent',
             'percent_off' => 50,
         ]);
+
+
 
         // \App\Models\User::factory()->create([
         //     'name' => 'Test User',
