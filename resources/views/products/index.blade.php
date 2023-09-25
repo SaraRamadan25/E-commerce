@@ -23,7 +23,7 @@
                                     <div class="dropdown-menu dropdown-menu-right">
                                         <a class="dropdown-item" href="#">Latest</a>
                                         <a class="dropdown-item" href="#">Popularity</a>
-                                        <a class="dropdown-item" href="#">Best Rating</a>
+                                        <a class="dropdown-item" href="#">Best rate</a>
                                     </div>
                                 </div>
                                 <div class="btn-group ml-2">

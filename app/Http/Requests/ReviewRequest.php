@@ -22,13 +22,12 @@ class ReviewRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'username'=>'required',
+            'username'=>'string|required',
             'email'=>'required|email',
-            'review'=>'required',
-            'rate'=>'required|numeric|min:1|max:5',
+            'review'=>'string|required',
+            'rate'=>'required',
             'product_id'=>'integer',
             'user_id'=>'integer',
-
         ];
     }
 }

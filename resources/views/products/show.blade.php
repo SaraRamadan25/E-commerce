@@ -1,6 +1,9 @@
+@if (session('success'))
+    <div style="background-color: #d4edda; color: #155724; border-color: #c3e6cb; padding: 10px; margin-bottom: 20px;">
+        {{ session('success') }}
+    </div>
+@endif
 <x-head />
-
-
 <!-- Shop Detail Start -->
 <div class="container-fluid pb-5">
     <div class="row px-xl-5">
@@ -8,6 +11,7 @@
             <div id="product-carousel" class="carousel slide" data-ride="carousel">
                 <div class="carousel-inner bg-light">
                     <div class="carousel-item active">
+
                         <img class="w-100 h-100" src="{{ $product->image }}" alt="Image">
                     </div>
                 </div>
@@ -17,14 +21,7 @@
         <div class="col-lg-7 h-auto mb-30">
             <div class="h-100 bg-light p-30">
                 <h3>{{ $product->name }}</h3>
-                <div class="d-flex mb-3">
-                    <div class="text-primary mr-2">
-                        <small class="fas fa-star"></small>
-                        <small class="fas fa-star"></small>
-                        <small class="fas fa-star"></small>
-                        <small class="fas fa-star-half-alt"></small>
-                        <small class="far fa-star"></small>
-                    </div>
+
                     <small class="pt-1">{{ $product->reviews->count() }}</small>
                 </div>
                 <h3 class="font-weight-semi-bold mb-4">{{ $product->price_after_offer }}</h3>
@@ -70,14 +67,6 @@
                                 <i class="fa fa-minus"></i>
                             </button>
                         </div>
-                        <input type="text" class="form-control bg-secondary border-0 text-center" value="1">
-                        <div class="input-group-btn">
-                            <button class="btn btn-primary btn-plus">
-                                <i class="fa fa-plus"></i>
-                            </button>
-                        </div>
-                    </div>
-
                     <form action="{{ route('cart.store') }}" method="post">
                         @csrf
                         <input type="hidden" name="id" value="{{ $product->id }}">
@@ -135,33 +124,14 @@
                                         <img src="{{ $review->user->image }}" alt="Image" class="img-fluid mr-3 mt-1"
                                              style="width: 45px;">
                                         <div class="media-body">
-                                            <h6>John Doe<small> - <i>{{ $review->created_at }}</i></small></h6>
-                                            <div class="text-primary mb-2">
-                                                <i class="fas fa-star"></i>
-                                                <i class="fas fa-star"></i>
-                                                <i class="fas fa-star"></i>
-                                                <i class="fas fa-star-half-alt"></i>
-                                                <i class="far fa-star"></i>
-                                            </div>
+                                            <h6>John Doe<small> - <i>{{ $review->created_at->diffForHumans() }}</i></small></h6>
                                             <p>{{ $review->review }}</p>
                                         </div>
                                     </div>
                                 @endforeach
                             </div>
-                            <div class="col-md-6">
-                                <h4 class="mb-4">Leave a review</h4>
-                                <small>Your email address will not be published. Required fields are marked *</small>
-                                <div class="d-flex my-3">
-                                    <p class="mb-0 mr-2" >Your Rating * :</p>
-                                    <div class="text-primary">
-                                        <i class="far fa-star"></i>
-                                        <i class="far fa-star"></i>
-                                        <i class="far fa-star"></i>
-                                        <i class="far fa-star"></i>
-                                        <i class="far fa-star"></i>
-                                    </div>
-                                </div>
-                                <form action="{{ route('review.store', $product->id )}}" method="post">
+
+                                <form action="{{ route('review.store', $product->id) }}" method="post">
                                     @csrf
                                     <div class="form-group">
                                         <label for="message">Your Review *</label>
@@ -174,6 +144,25 @@
                                     <div class="form-group">
                                         <label for="email">Your Email *</label>
                                         <input name="email" type="email" class="form-control" id="email">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="rate">Your rate *</label>
+                                        <div class="starability-basic">
+                                            <input type="radio" id="rate-1" name="rate" value="1">
+                                            <label for="rate-1" title="Terrible">1 star</label>
+
+                                            <input type="radio" id="rate-2" name="rate" value="2">
+                                            <label for="rate-2" title="Not Good">2 stars</label>
+
+                                            <input type="radio" id="rate-3" name="rate" value="3">
+                                            <label for="rate-3" title="Average">3 stars</label>
+
+                                            <input type="radio" id="rate-4" name="rate" value="4">
+                                            <label for="rate-4" title="Good">4 stars</label>
+
+                                            <input type="radio" id="rate-5" name="rate" value="5">
+                                            <label for="rate-5" title="Excellent">5 stars</label>
+                                        </div>
                                     </div>
                                     <div class="form-group mb-0">
                                         <input type="submit" value="Leave Your Review" class="btn btn-primary px-3">
@@ -215,14 +204,6 @@
                                 <h6 class="text-muted ml-2">
                                     <del>{{ $product->price_after_offer }}</del>
                                 </h6>
-                            </div>
-                            <div class="d-flex align-items-center justify-content-center mb-1">
-                                <small class="fa fa-star text-primary mr-1"></small>
-                                <small class="fa fa-star text-primary mr-1"></small>
-                                <small class="fa fa-star text-primary mr-1"></small>
-                                <small class="fa fa-star text-primary mr-1"></small>
-                                <small class="fa fa-star text-primary mr-1"></small>
-                                <small>(99)</small>
                             </div>
                         </div>
                     </div>

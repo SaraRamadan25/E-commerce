@@ -13,16 +13,14 @@ use Illuminate\Http\Request;
 
 class ReviewController extends Controller
 {
-    public function store(Request $request, $product_id): RedirectResponse
+    public function store(ReviewRequest $request, $product_id): RedirectResponse
     {
-        $request['user_id'] = 1;
+        $request['user_id'] = auth()->user()->id;
         $request['product_id'] = $product_id;
-        $request['rate'] = 5;
         Review::create($request->all());
-return redirect()->back();
+        return redirect()->back()->with('success','Review Added Successfully');
+
     }
-
-
     public function show (Product $product): View|Application|Factory
     {
         $reviews = $product->reviews()->take(5)->get();

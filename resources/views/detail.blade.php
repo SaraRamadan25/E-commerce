@@ -302,11 +302,11 @@
                                             <h6>{{ $review->username }}<small> - <i>{{ $review->created_at }}</i></small></h6>
                                         @endforeach
                                         <div class="text-primary mb-2">
-                                            <i class="star fas fa-star" data-rating="1"></i>
-                                            <i class="star fas fa-star" data-rating="2"></i>
-                                            <i class="star fas fa-star" data-rating="3"></i>
-                                            <i class="star fas fa-star" data-rating="4"></i>
-                                            <i class="star far fa-star" data-rating="5"></i>
+                                            <i class="star fas fa-star" data-rate="1"></i>
+                                            <i class="star fas fa-star" data-rate="2"></i>
+                                            <i class="star fas fa-star" data-rate="3"></i>
+                                            <i class="star fas fa-star" data-rate="4"></i>
+                                            <i class="star far fa-star" data-rate="5"></i>
                                         </div>
 
                                         <p>Diam amet duo labore stet elitr ea clita ipsum, tempor labore accusam ipsum et no at. Kasd diam tempor rebum magna dolores sed sed eirmod ipsum.</p>
@@ -372,7 +372,7 @@
 <script>
     $(document).ready(function() {
         $('.star').click(function() {
-            var selectedRating = $(this).data('rating');
+            var selectedrate = $(this).data('rate');
 
             // Remove 'selected' class from all stars
             $('.star').removeClass('selected');
@@ -381,16 +381,16 @@
             $(this).addClass('selected');
             $(this).prevAll('.star').addClass('selected');
 
-            // Send the selected rating to the server
+            // Send the selected rate to the server
             $.ajax({
                 url: '{{ route("products.rate", $product->id) }}',
                 type: 'POST',
-                data: { rating: selectedRating },
+                data: { rate: selectedrate },
                 success: function(response) {
-                    console.log('Rating submitted successfully');
+                    console.log('rate submitted successfully');
                 },
                 error: function(xhr, status, error) {
-                    console.error('Error submitting rating:', error);
+                    console.error('Error submitting rate:', error);
                 }
             });
         });
