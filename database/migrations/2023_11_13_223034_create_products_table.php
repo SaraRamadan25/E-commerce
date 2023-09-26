@@ -23,7 +23,7 @@ return new class extends Migration
            $table->string('rate');
             $table->foreignId('category_id')->constrained()->cascadeOnDelete();
             $table->foreignid('offer_id')->nullable();
-            $table->foreignId('cart_id');
+            $table->foreignId('cart_id')->nullable();
             $table->string('image')->nullable();
 
             $table->timestamps();
