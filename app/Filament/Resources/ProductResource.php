@@ -50,7 +50,6 @@ class ProductResource extends Resource
                 Forms\Components\TextInput::make('rate')
                     ->required()
                     ->numeric(),
-
                 Forms\Components\FileUpload::make('image')
                     ->image()
                     ->imageEditor(),
