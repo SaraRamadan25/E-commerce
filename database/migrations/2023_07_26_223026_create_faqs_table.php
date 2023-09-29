@@ -15,10 +15,8 @@ return new class extends Migration
             $table->id();
             $table->string('username');
             $table->text('question');
-            $table->text('answer');
-            $table->string('tags');
+            $table->json('tags');
             $table->boolean('popularity');
-            $table->date('last_asked_date');
 
             $table->timestamps();
 

@@ -10,12 +10,14 @@ class Faq extends Model
     use HasFactory;
 
     protected $fillable = [
-        'name',
+        'username',
         'question',
-        'answer',
-        'tage',
+        'tags',
         'popularity',
-        'last_asked_date'
+    ];
+
+    protected $casts = [
+        'tags' => 'json',
     ];
 
 }

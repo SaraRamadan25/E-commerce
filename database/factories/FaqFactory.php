@@ -19,10 +19,8 @@ class FaqFactory extends Factory
         return [
             'username' => $this->faker->name,
             'question' => $this->faker->text,
-            'answer' => $this->faker->text,
-            'tags' => $this->faker->text,
+            'tags' => $this->faker->words(3),
             'popularity' => $this->faker->boolean,
-            'last_asked_date' => $this->faker->date(),
         ];
     }
 }
