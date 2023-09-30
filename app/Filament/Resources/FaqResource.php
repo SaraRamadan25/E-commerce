@@ -30,8 +30,7 @@ class FaqResource extends Resource
                     ->maxLength(255),
                 Forms\Components\TextInput::make('question')
                     ->required()
-                    ->maxLength(65535)
-                    ->columnSpanFull(),
+                    ->maxLength(65535),
                 Forms\Components\Select::make('tags')
                     ->required()
                     ->options([
