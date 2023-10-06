@@ -159,6 +159,8 @@ return [
         Gloudemans\Shoppingcart\ShoppingcartServiceProvider::class,
         Cartalyst\Stripe\Laravel\StripeServiceProvider::class,
         willvincent\Rateable\RateableServiceProvider::class,
+        Srmklive\PayPal\Providers\PayPalServiceProvider::class,
+
 
 
         /*
@@ -194,6 +196,9 @@ return [
         // 'Example' => App\Facades\Example::class,
         'Cart' => \Gloudemans\Shoppingcart\Facades\Cart::class,
         'Stripe' => Cartalyst\Stripe\Laravel\Facades\Stripe::class,
+        'PayPal' => Srmklive\PayPal\Facades\PayPal::class,
+
+
 
     ])->toArray(),
 

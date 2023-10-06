@@ -24,6 +24,7 @@ class ProductRequest extends FormRequest
         return [
             'id'=>'required|integer',
             'name' => 'required|string|max:255',
+            'price_after_offer'=>'required|numeric',
             'quantity' => 'integer',
         ];
 

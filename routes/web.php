@@ -9,6 +9,7 @@ use App\Http\Controllers\CouponController;
 use App\Http\Controllers\DetailController;
 use App\Http\Controllers\FaqController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\PaypalController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ReviewController;
@@ -66,6 +67,11 @@ Route::get('/shop/filter', [ShopController::class,'filter'])->name('shop.filter'
 Route::post('products/{product}/rate',[ProductController::class, 'rate'])->name('products.rate');
 
 Route::post('products/{product_id}/review', [ReviewController::class, 'store'])->name('review.store');
+
+Route::get('payment', [PaypalController::class, 'payment'])->name('payment');
+Route::get('cancel', [PaypalController::class, 'cancel'])->name('payment.cancel');
+
+Route::get('payment/success', [PaypalController::class, 'success'])->name('payment.success');
 
 Route::get('/dashboard', function () {
     return view('dashboard');
