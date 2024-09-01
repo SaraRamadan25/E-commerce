@@ -30,18 +30,28 @@ class CartController extends Controller
         ]);
     }
 
-    public function store(ProductRequest $request): RedirectResponse
+    public function store(Request $request): RedirectResponse
     {
-        $product = Product::findOrFail($request->input('id'));
+        $request->validate([
+            'id' => 'required|integer|exists:products,id',
+            'name' => 'required|string',
+            'price' => 'required|numeric|min:0',
+            'quantity' => 'required|integer|min:1',
+        ]);
+
+        $productId = $request->input('id');
+        $productName = $request->input('name');
+        $productPrice = $request->input('price');
+        $quantity = $request->input('quantity', 1);
 
         Cart::add(
-            $product->id,
-            $product->name,
-            1,
-            $product->price_after_offer,
-        )->associate('App\Models\Product');
+            $productId,
+            $productName,
+            $quantity,
+            $productPrice
+        )->associate(Product::class);
 
-        return redirect()->route('cart.index')->with('message', 'Successfully added');
+        return redirect()->route('cart.index')->with('success', 'Successfully added to cart');
     }
 
     public function destroy($id): RedirectResponse
@@ -56,28 +66,45 @@ class CartController extends Controller
             'quantity' => 'required|numeric|between:1,5'
         ]);
 
-        if ($validator->fails())
-        {
-            session()->flash('errors', collect(['Quantity must be between 1 and 5.']));
-            return response()->json(['success' => false], 400);
+        if ($validator->fails()) {
+            return response()->json(['success' => false, 'errors' => $validator->errors()], 400);
         }
 
+        // Update cart item quantity
         Cart::update($id, $request->quantity);
-        session()->flash('success_message', 'Quantity updated successfully!');
-        return response()->json(['success' => true]);
+
+        // Calculate updated values
+        $subtotal = (float) Cart::subtotal(false, false, false); // Ensure it's a float
+        $discount = session()->has('coupon') ? (float) session()->get('coupon')['discount'] : 0;
+        $newSubtotal = max(0, $subtotal - $discount);  // Ensure no negative subtotal
+        $taxRate = config('cart.tax') / 100;
+        $newTax = $newSubtotal * $taxRate;
+        $newTotal = $newSubtotal + $newTax;
+
+        return response()->json([
+            'success' => true,
+            'subtotal' => number_format($subtotal, 2),
+            'discount' => number_format($discount, 2),
+            'newSubtotal' => number_format($newSubtotal, 2),
+            'newTax' => number_format($newTax, 2),
+            'newTotal' => number_format($newTotal, 2)
+        ]);
     }
 
     private function getNumbers(): Collection
     {
         $tax = config('cart.tax') / 100;
+
+        // Get and ensure $discount is a numeric value
         $discount = session()->get('coupon')['discount'] ?? 0;
+        $discount = is_numeric($discount) ? (float) $discount : 0;
 
-        // Ensure $discount is a numeric value
-        $discount = is_numeric($discount) ? $discount : 0;
+        // Ensure subtotal is a numeric value
+        $subtotal = (float) str_replace(['$', ','], '', Cart::subtotal());
+        $newSubtotal = $subtotal - $discount;
 
-        $newSubtotal = (Cart::subtotal() - $discount);
         $newTax = $newSubtotal * $tax;
-        $newTotal = $newSubtotal * (1 + $tax);
+        $newTotal = $newSubtotal + $newTax;
 
         return collect([
             'tax' => $tax,
@@ -85,6 +112,25 @@ class CartController extends Controller
             'newSubtotal' => $newSubtotal,
             'newTax' => $newTax,
             'newTotal' => $newTotal,
+        ]);
+    }
+
+    public function showCartSummary()
+    {
+        $taxRate = config('cart.tax') / 100;
+        $discount = session()->get('coupon')['discount'] ?? 0;
+
+        $subtotal = Cart::subtotal(false, false, false); // Get raw subtotal without formatting
+        $newSubtotal = $subtotal - $discount;
+        $newTax = $newSubtotal * $taxRate;
+        $newTotal = $newSubtotal + $newTax;
+
+        return view('cart.index', [
+            'subtotal' => $subtotal,
+            'newSubtotal' => $newSubtotal,
+            'newTax' => $newTax,
+            'newTotal' => $newTotal,
+            'discount' => $discount
         ]);
     }
 

@@ -22,6 +22,6 @@ class ContactController extends Controller
     {
         Contact::create($request->validated());
 
-        return redirect()->route('contacts.index')->with('success', 'Message sent successfully!');
+        return redirect()->route('index')->with('success', 'Message sent successfully!');
     }
 }

@@ -370,29 +370,30 @@
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
-    $(document).ready(function() {
-        $('.star').click(function() {
-            var selectedrate = $(this).data('rate');
+    document.addEventListener('DOMContentLoaded', function () {
+        const form = document.querySelector('form[action="{{ route('cart.store') }}"]');
+        form.addEventListener('submit', function (e) {
+            e.preventDefault(); // Prevent the default form submission
 
-            // Remove 'selected' class from all stars
-            $('.star').removeClass('selected');
+            const formData = new FormData(form);
 
-            // Add 'selected' class to clicked star and previous stars
-            $(this).addClass('selected');
-            $(this).prevAll('.star').addClass('selected');
-
-            // Send the selected rate to the server
-            $.ajax({
-                url: '{{ route("products.rate", $product->id) }}',
-                type: 'POST',
-                data: { rate: selectedrate },
-                success: function(response) {
-                    console.log('rate submitted successfully');
+            fetch(form.action, {
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
                 },
-                error: function(xhr, status, error) {
-                    console.error('Error submitting rate:', error);
-                }
-            });
+                body: formData
+            })
+                .then(response => response.json())
+                .then(data => {
+                    // Handle the response data
+                    if (data.success) {
+                        alert('Item added to cart');
+                    } else {
+                        alert('Failed to add item to cart');
+                    }
+                })
+                .catch(error => console.error('Error:', error));
         });
     });
 </script>

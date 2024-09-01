@@ -33,9 +33,6 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
-
-
-
 Route::get('index',[HomeController::class,'index'])->name('index');
 
 Route::get('categories',[CategoryController::class,'index'])->name('categories.index');

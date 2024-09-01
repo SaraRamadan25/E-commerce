@@ -1,9 +1,9 @@
 <?php
 
-function presentPrice($price): string
-{ /*   return sprintf('$%.2f', $price / 100);*/
+function presentPrice($price)
+{
+    return '$' . number_format((float) $price, 2);
+}
 
-        $formattedPrice = floatval($price);
-        return '$' . number_format($formattedPrice, 2);
-    }
+
 
