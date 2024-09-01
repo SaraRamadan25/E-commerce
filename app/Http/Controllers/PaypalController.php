@@ -38,7 +38,6 @@ class PaypalController extends Controller
 
         $provider = new ExpressCheckout;
         $response = $provider->setExpressCheckout($data);
-dd($response);
         dd($response);
         if ($response['ACK'] === 'Success') {
             return redirect($response['paypal_link']);

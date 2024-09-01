@@ -47,6 +47,16 @@ class Product extends Model
         return $this->hasMany(Review::class);
     }
 
+    public function users(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function owner(): BelongsTo
+    {
+        return $this->belongsTo(Owner::class);
+    }
+
     public function scopeFilter($query , array $filters): void
     {
         $query->when($filters['search'] ?? false, fn($query, $search) =>
@@ -61,5 +71,7 @@ class Product extends Model
         ->where('categories.slug',$category))
         );
     }
+
+
 
 }

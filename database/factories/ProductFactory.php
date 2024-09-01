@@ -6,6 +6,7 @@ use App\Models\Cart;
 use App\Models\Category;
 use App\Models\Checkout;
 use App\Models\Offer;
+use App\Models\Owner;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -34,6 +35,7 @@ class ProductFactory extends Factory
             'cart_id' => Cart::factory(),
             'rate'=>$this->faker->numberBetween(1,5),
             'image' => $this->faker->imageUrl(),
+            'owner_id' => Owner::factory(),
         ];
     }
 }

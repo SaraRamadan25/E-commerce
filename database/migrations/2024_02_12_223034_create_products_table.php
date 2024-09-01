@@ -24,6 +24,7 @@ return new class extends Migration
             $table->foreignId('category_id')->constrained()->cascadeOnDelete();
             $table->foreignid('offer_id')->nullable();
             $table->foreignId('cart_id')->nullable();
+            $table->foreignId('owner_id')->constrained('owners')->cascadeOnDelete();
             $table->string('image')->nullable();
 
             $table->timestamps();

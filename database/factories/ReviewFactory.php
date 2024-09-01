@@ -19,8 +19,6 @@ class ReviewFactory extends Factory
     public function definition(): array
     {
         return [
-            'username'=>$this->faker->name(),
-            'email'=>$this->faker->email(),
             'review'=>$this->faker->text(),
             'product_id'=>Product::factory(),
             'rate'=>$this->faker->numberBetween(1,5),
