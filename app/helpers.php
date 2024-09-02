@@ -1,9 +1,10 @@
 <?php
 
-function presentPrice($price)
+function presentPrice($price): string
 {
-    return '$' . number_format((float) $price, 2);
+    return '$' . number_format((float) $price, 2, '.', ',');
 }
+
 
 
 

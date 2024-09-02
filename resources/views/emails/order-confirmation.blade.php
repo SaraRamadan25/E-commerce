@@ -9,15 +9,23 @@
 
 <h2>Order Contents:</h2>
 <ul>
-    @foreach($orderDetails as $item)
-        <li>
-            Content: {{ $item['content'] }}<br>
-            Quantity: {{ $item['quantity'] }}
-        </li>
-    @endforeach
+    @if(is_array($orderDetails) || is_object($orderDetails))
+        @foreach($orderDetails as $item)
+            @if(is_array($item) || is_object($item))
+                <li>
+                    Content: {{ $item['content'] ?? 'N/A' }}<br>
+                    Quantity: {{ $item['quantity'] ?? 'N/A' }}
+                </li>
+            @else
+                <li>Item format is incorrect.</li>
+            @endif
+        @endforeach
+    @else
+        <li>No order details available.</li>
+    @endif
 </ul>
 
-<p>Total Quantity: {{ array_sum(array_column($orderDetails, 'quantity')) }}</p>
+<p>Total Quantity: {{ array_sum(array_column($orderDetails, 'quantity', 0)) }}</p>
 
 <p>Feel free to contact us if you have any questions or concerns.</p>
 

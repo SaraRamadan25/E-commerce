@@ -49,7 +49,7 @@
                                     @endfor
                                 </select>
                             </td>
-                            <td class="align-middle">{{ '$'. number_format($item->model->price_after_offer * $item->qty, 2) }}</td>
+                            <td class="align-middle">{{ '$'. number_format($item->model->price_after_offer * $item->qty) }}</td>
                             <td class="align-middle">
                                 <form method="POST" action="{{ route('cart.destroy', $item->rowId) }}">
                                     @csrf
@@ -87,7 +87,7 @@
                 <div class="border-bottom pb-2">
                     <div class="d-flex justify-content-between mb-3">
                         <h6>Subtotal</h6>
-                        <h6 id="subtotal">{{ presentPrice(Cart::subtotal()) }}</h6>
+                        <h6 id="subtotal">{{ presentPrice($newSubtotal) }}</h6>
                     </div>
 
                     @if(session()->has('coupon'))
@@ -122,7 +122,7 @@
 
                         <div class="d-flex justify-content-between mt-2">
                             <h5>Total</h5>
-                            <h5 id="newTotal">{{ presentPrice(Cart::total()) }}</h5>
+                            <h5 id="newTotal">{{ presentPrice($newTotal) }}</h5>
                         </div>
                     @endif
 
@@ -144,8 +144,7 @@
         quantityElements.forEach(function(element) {
             element.addEventListener('change', function () {
                 const id = element.getAttribute('data-id');
-                const quantity = parseInt(element.value, 10); // Ensure quantity is an integer
-
+                const quantity = parseInt(element.value, 10);
                 axios.patch(`/cart/${id}`, { quantity: quantity })
                     .then(function (response) {
                         // Update cart summary on the page

@@ -11,12 +11,11 @@ use Illuminate\Support\Facades\Mail;
 
 class ConfirmationController extends Controller
 {
-    public function index(): View|Application|Factory
+    public function index(Request $request): View|Application|Factory
     {
-        if (session()->has('message')) {
-            return view('index');
+        if ($request->session()->has('message')) {
+            return view('thankyou');
         }
-        return view('thankyou');
+        return view('error');
     }
-
 }

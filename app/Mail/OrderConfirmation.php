@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Mail;
 
 use Illuminate\Bus\Queueable;
@@ -10,12 +9,13 @@ class OrderConfirmation extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public $orderDetails;
+    public array $orderDetails;
 
     /**
      * Create a new message instance.
      *
      * @param array $orderDetails
+     * @return void
      */
     public function __construct(array $orderDetails)
     {
@@ -27,10 +27,9 @@ class OrderConfirmation extends Mailable
      *
      * @return $this
      */
-    public function build(): static
+    public function build()
     {
         return $this->view('emails.order-confirmation')
-            ->with(['orderDetails' => $this->orderDetails])
-            ->subject('Order Confirmation');
+            ->with('orderDetails', $this->orderDetails);
     }
 }

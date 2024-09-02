@@ -95,7 +95,6 @@ class CartController extends Controller
     {
         $tax = config('cart.tax') / 100;
 
-        // Get and ensure $discount is a numeric value
         $discount = session()->get('coupon')['discount'] ?? 0;
         $discount = is_numeric($discount) ? (float) $discount : 0;
 
@@ -115,12 +114,12 @@ class CartController extends Controller
         ]);
     }
 
-    public function showCartSummary()
+    public function showCartSummary(): View|Application|Factory|\Illuminate\Contracts\Foundation\Application
     {
         $taxRate = config('cart.tax') / 100;
         $discount = session()->get('coupon')['discount'] ?? 0;
 
-        $subtotal = Cart::subtotal(false, false, false); // Get raw subtotal without formatting
+        $subtotal = Cart::subtotal(false, false, false);
         $newSubtotal = $subtotal - $discount;
         $newTax = $newSubtotal * $taxRate;
         $newTotal = $newSubtotal + $newTax;
