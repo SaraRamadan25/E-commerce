@@ -12,6 +12,7 @@ use Gloudemans\Shoppingcart\Facades\Cart;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Foundation\Application;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Mail;
@@ -37,19 +38,17 @@ class CheckoutController extends Controller
         ]);
     }
 
-    public function store(Request $request)
+    public function store(Request $request): RedirectResponse
     {
         Stripe::setApiKey(env('STRIPE_SECRET'));
 
-        // Get cart total and convert to numeric
         $total = Cart::total();
         $numericTotal = preg_replace('/[^\d.]/', '', $total);
-        $amount = (int)($numericTotal * 100); // Convert to cents
+        $amount = (int)($numericTotal * 100);
 
         $paymentMethodId = $request->input('payment_method');
 
         try {
-            // Create a PaymentIntent with the payment method and amount
             $paymentIntent = PaymentIntent::create([
                 'amount' => $amount,
                 'currency' => 'usd',
@@ -59,17 +58,36 @@ class CheckoutController extends Controller
             ]);
 
             if ($paymentIntent->status === 'succeeded') {
-                // Clear the cart after successful payment
+                $cartItems = Cart::content();
+                $orderDetails = [];
+                $totalQuantity = 0;
+
+                foreach ($cartItems as $item) {
+                    $orderDetails[] = [
+                        'content' => $item->name,
+                        'quantity' => $item->qty,
+                    ];
+                    $totalQuantity += $item->qty;
+                }
+
                 Cart::destroy();
 
-                // Prepare order details
-                $orderDetails = [
-                    'name' => $request->input('name'),
-                    'email' => $request->input('email'),
-                    'total' => $total,
+                $orderDetails[] = [
+                    'content' => 'Customer Name',
+                    'quantity' => $request->input('name'),
                 ];
 
-                Mail::to($request->input('email'))->send(new OrderConfirmation($orderDetails));
+                $orderDetails[] = [
+                    'content' => 'Customer Email',
+                    'quantity' => $request->input('email'),
+                ];
+
+                $orderDetails[] = [
+                    'content' => 'Total',
+                    'quantity' => $total,
+                ];
+
+                Mail::to($request->input('email'))->send(new OrderConfirmation($orderDetails, $totalQuantity, $total));
 
                 return redirect()->route('confirmation.index')->with('message', 'Payment successful!');
             } else {
@@ -78,8 +96,7 @@ class CheckoutController extends Controller
         } catch (\Exception $e) {
             return redirect()->route('checkout.index')->with('error', 'Payment failed: ' . $e->getMessage());
         }
-    }
-    private function calculateTax($subtotal): float
+    }    private function calculateTax($subtotal): float
     {
         return $subtotal * 0.1;
     }

@@ -9,7 +9,6 @@ class OrderConfirmation extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public array $orderDetails;
 
     /**
      * Create a new message instance.
@@ -17,19 +16,24 @@ class OrderConfirmation extends Mailable
      * @param array $orderDetails
      * @return void
      */
-    public function __construct(array $orderDetails)
+    public $orderDetails;
+    public $totalQuantity;
+    public $totalAmount;
+
+    public function __construct($orderDetails, $totalQuantity, $totalAmount)
     {
         $this->orderDetails = $orderDetails;
+        $this->totalQuantity = $totalQuantity;
+        $this->totalAmount = $totalAmount;
     }
 
-    /**
-     * Build the message.
-     *
-     * @return $this
-     */
     public function build()
     {
         return $this->view('emails.order-confirmation')
-            ->with('orderDetails', $this->orderDetails);
+            ->with([
+                'orderDetails' => $this->orderDetails,
+                'totalQuantity' => $this->totalQuantity,
+                'totalAmount' => $this->totalAmount,
+            ]);
     }
 }
