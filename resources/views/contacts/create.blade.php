@@ -89,9 +89,9 @@
                 <div class="input-group">
                     <input type="text" class="form-control" placeholder="Search for products">
                     <div class="input-group-append">
-                            <span class="input-group-text bg-transparent text-primary">
-                                <i class="fa fa-search"></i>
-                            </span>
+                        <span class="input-group-text bg-transparent text-primary">
+                            <i class="fa fa-search"></i>
+                        </span>
                     </div>
                 </div>
             </form>
@@ -103,7 +103,6 @@
     </div>
 </div>
 <!-- Topbar End -->
-
 
 <!-- Contact Start -->
 <div class="container-fluid">
@@ -130,8 +129,8 @@
                         <p class="help-block text-danger"></p>
                     </div>
                     <div class="control-group">
-                            <textarea class="form-control" rows="8" id="message" name="message" placeholder="Message"
-                                      required="required" data-validation-required-message="Please enter your message"></textarea>
+                        <textarea class="form-control" rows="8" id="message" name="message" placeholder="Message"
+                                  required="required" data-validation-required-message="Please enter your message"></textarea>
                         <p class="help-block text-danger"></p>
                     </div>
                     <div>
@@ -145,5 +144,21 @@
 </div>
 <!-- Contact End -->
 
+<!-- Footer Start -->
+<x-footer />
+<!-- Footer End -->
+
+<!-- JavaScript Libraries -->
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
+<script src="assets/lib/easing/easing.min.js"></script>
+<script src="assets/lib/owlcarousel/owl.carousel.min.js"></script>
+
+<!-- Contact Javascript File -->
+<script src="assets/mail/jqBootstrapValidation.min.js"></script>
+<script src="assets/mail/contact.js"></script>
+
+<!-- Template Javascript -->
+<script src="assets/js/main.js"></script>
 </body>
 </html>

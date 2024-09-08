@@ -107,7 +107,6 @@ class CheckoutController extends Controller
         $discount = session()->get('coupon')['discount'] ?? 0;
         $discount = is_numeric($discount) ? (float) $discount : 0;
 
-        // Ensure subtotal is a numeric value
         $subtotal = (float) str_replace(['$', ','], '', Cart::subtotal());
         $newSubtotal = $subtotal - $discount;
 

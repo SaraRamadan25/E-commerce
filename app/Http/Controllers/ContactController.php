@@ -13,9 +13,9 @@ use Illuminate\View\Factory;
 class ContactController extends Controller
 {
 
-    public function index(): View|Application|Factory
+    public function create(): View|Application|Factory
     {
-        return view('contacts.index');
+        return view('contacts.create');
     }
 
     public function store(ContactRequest $request): RedirectResponse

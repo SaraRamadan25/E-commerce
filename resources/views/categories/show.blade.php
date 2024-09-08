@@ -27,12 +27,16 @@
 <div class="container-fluid pt-5 pb-3">
     <h2 class="section-title position-relative text-uppercase mx-xl-5 mb-4"><span class="bg-secondary pr-3">Products</span></h2>
     <div class="row px-xl-5">
-        @foreach($products as $product)
-            <div class="col-lg-3 col-md-4 col-sm-6 pb-1">
-                <h3>{{ $product->name }}</h3>
-                <p>{{ $product->description }}</p>
-            </div>
-        @endforeach
+        @if($category->products->isEmpty())
+            <p>There are no products related to this category.</p>
+        @else
+            @foreach($products as $product)
+                <div class="col-lg-3 col-md-4 col-sm-6 pb-1">
+                    <h3>{{ $product->name }}</h3>
+                    <p>{{ $product->description }}</p>
+                </div>
+            @endforeach
+        @endif
     </div>
 </div>
 <!-- Products End -->

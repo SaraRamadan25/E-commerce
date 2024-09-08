@@ -143,7 +143,7 @@
             <div class="pt-2">
                 <div class="d-flex justify-content-between mt-2">
                     <h5>Total</h5>
-                    <h5>{{ presentPrice(Cart::total()) }}</h5>
+                    <h5>{{ presentPrice(Cart::subtotal() + Cart::tax()) }}</h5>
                 </div>
             </div>
         </div>
