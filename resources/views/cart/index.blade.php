@@ -49,7 +49,7 @@
                                     @endfor
                                 </select>
                             </td>
-                            <td class="align-middle">{{ '$'. number_format($item->model->price_after_offer * $item->qty) }}</td>
+                            <td class="align-middle">{{ '$'. number_format($item->model->price_after_offer * $item->qty, 2) }}</td>
                             <td class="align-middle">
                                 <form method="POST" action="{{ route('cart.destroy', $item->rowId) }}">
                                     @csrf
@@ -145,14 +145,27 @@
             element.addEventListener('change', function () {
                 const id = element.getAttribute('data-id');
                 const quantity = parseInt(element.value, 10);
-                axios.patch(`/cart/${id}`, { quantity: quantity })
+
+                if (quantity < 1 || quantity > 5) {
+                    alert('Quantity must be between 1 and 5.');
+                    return;
+                }
+
+                axios.patch(`/cart/${id}`, {
+                    quantity: quantity,
+                    _token: '{{ csrf_token() }}'
+                })
                     .then(function (response) {
-                        // Update cart summary on the page
-                        document.querySelector('#subtotal').innerText = response.data.subtotal;
-                        document.querySelector('#discount').innerText = response.data.discount;
-                        document.querySelector('#newSubtotal').innerText = response.data.newSubtotal;
-                        document.querySelector('#newTax').innerText = response.data.newTax;
-                        document.querySelector('#newTotal').innerText = response.data.newTotal;
+                        if (response.data.success) {
+                            document.querySelector('#subtotal').innerText = response.data.subtotal;
+                            document.querySelector('#discount').innerText = response.data.discount || '0';
+                            document.querySelector('#newSubtotal').innerText = response.data.newSubtotal;
+                            document.querySelector('#newTax').innerText = response.data.newTax;
+                            document.querySelector('#newTotal').innerText = response.data.newTotal;
+                        } else {
+                            alert('Failed to update cart. Please try again.');
+                            window.location.href = '{{ route('cart.index') }}';
+                        }
                     })
                     .catch(function (error) {
                         console.log(error);

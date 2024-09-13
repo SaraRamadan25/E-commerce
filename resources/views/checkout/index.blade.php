@@ -118,7 +118,9 @@
     </div>
 
     <div class="col-lg-4">
-        <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">Order Total</span></h5>
+        <h5 class="section-title position-relative text-uppercase mb-3">
+            <span class="bg-secondary pr-3">Order Total</span>
+        </h5>
         <div class="bg-light p-30 mb-5">
             <div class="border-bottom">
                 <h6 class="mb-3">Products</h6>
@@ -126,7 +128,7 @@
                     <div class="d-flex justify-content-between mb-3">
                         <h6>{{ $item->model->name }}</h6>
                         <h6><img src="{{ $item->model->image }}" alt="Product Image" style="width: 50px;"></h6>
-                        <h6>  price before discount  {{ presentPrice($item->model->original_price) }}</h6>
+                        <h6>Price before discount {{ presentPrice($item->model->original_price) }}</h6>
                     </div>
                 @endforeach
             </div>
@@ -135,22 +137,47 @@
                     <h6>Subtotal</h6>
                     <h6>{{ presentPrice(Cart::subtotal()) }}</h6>
                 </div>
-                <div class="d-flex justify-content-between">
-                    <h6 class="font-weight-medium">Tax</h6>
-                    <h6 class="font-weight-medium">{{ presentPrice(Cart::tax()) }}</h6>
+
+                @if (session()->has('coupon'))
+                    @php
+                        $subtotal = (float) Cart::subtotal();
+                        $discount = (float) (session()->get('coupon')['discount'] ?? 0);
+                        $newSubtotal = $subtotal - $discount;
+                    @endphp
+
+                    <div class="d-flex justify-content-between mb-3">
+                        @if (isset(session()->get('coupon')['code']))
+                            <h6>Discount ({{ session()->get('coupon')['code'] }})</h6>
+                        @endif
+                        <h6>{{ presentPrice($discount) }}</h6>
+                    </div>
+
+                    <div class="d-flex justify-content-between mb-3">
+                        <h6>New Subtotal</h6>
+                        <h6>{{ presentPrice($newSubtotal) }}</h6>
+                    </div>
+                @endif
+
+                <div class="d-flex justify-content-between mb-3">
+                    <h6>Tax</h6>
+                    <h6>{{ presentPrice(Cart::tax()) }}</h6>
                 </div>
             </div>
             <div class="pt-2">
                 <div class="d-flex justify-content-between mt-2">
                     <h5>Total</h5>
-                    <h5>{{ presentPrice(Cart::subtotal() + Cart::tax()) }}</h5>
+                    @php
+                        $tax = (float) Cart::tax();
+                        $totalAfterDiscount = $newSubtotal + $tax;
+                    @endphp
+                    <h5>{{ presentPrice($totalAfterDiscount) }}</h5>
                 </div>
             </div>
         </div>
     </div>
 </div>
 
-<script src="https://js.stripe.com/v3/"></script>
+    <script src="https://js.stripe.com/v3/"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         const stripe = Stripe('{{ env("STRIPE_KEY") }}');
@@ -162,10 +189,8 @@
         form.addEventListener('submit', async (event) => {
             event.preventDefault();
 
-            // Disable the button to prevent multiple clicks
             document.getElementById('complete-order').disabled = true;
 
-            // Create a payment method
             const { paymentMethod, error } = await stripe.createPaymentMethod({
                 type: 'card',
                 card: cardElement,

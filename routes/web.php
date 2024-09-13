@@ -34,7 +34,6 @@ Route::delete('/cart/{product}', [CartController::class,'destroy'])->name('cart.
 
 Route::get('products',[ProductController::class,'index'])->name('products.index');
 Route::get('products/{product}',[ProductController::class,'show'])->name('products.show');
-Route::post('products',[ProductController::class,'store'])->name('products.store');
 
 
 Route::post('coupon',[CouponController::class,'store'])->name('coupon.store');
