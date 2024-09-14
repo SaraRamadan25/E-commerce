@@ -49,17 +49,15 @@ Route::get('faq', [FaqController::class, 'index'])->name('faq.index');
 Route::get('shop',[ShopController::class,'index'])->name('shop.index');
 Route::get('/shop/filter', [ShopController::class,'filter'])->name('shop.filter');
 
-
 Route::post('products/{product}/rate',[ProductController::class, 'rate'])->name('products.rate');
 
 Route::post('products/{product_id}/review', [ReviewController::class, 'store'])->name('review.store');
 
 Route::get('payment', [PaypalController::class, 'payment'])->name('payment');
-Route::get('cancel', [PaypalController::class, 'cancel'])->name('payment.cancel');
-
+Route::get('payment/cancel', [PaypalController::class, 'cancel'])->name('payment.cancel');
 Route::get('payment/success', [PaypalController::class, 'success'])->name('payment.success');
-Route::post('search', [ProductController::class, 'search'])->name('search');
-Route::get('/reviews', [ReviewController::class, 'index']);
+
+Route::get('/reviews/product/{productName}', [ReviewController::class, 'showByProductName'])->name('reviews.byProductName');
 
 Route::get('/dashboard', function () {
     return view('dashboard');

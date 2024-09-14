@@ -35,13 +35,6 @@ class ShopController extends Controller
             $products->where('color', $request->input('color'));
         }
 
-        if ($request->has('price_after_offer')) {
-            $priceRange = explode('-', $request->input('price_after_offer'));
-            if (count($priceRange) === 2) {
-                $products->whereBetween('price_after_offer', $priceRange);
-            }
-        }
-
         $filteredProducts = $products->get();
 
             return view('shop.index', compact('filteredProducts'));

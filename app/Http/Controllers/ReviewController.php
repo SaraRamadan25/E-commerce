@@ -2,49 +2,40 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\ReviewRequest;
 use App\Models\Product;
 use App\Models\Review;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Foundation\Application;
-use Illuminate\Http\JsonResponse;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
 class ReviewController extends Controller
 {
-    public function index(): \Illuminate\Contracts\Foundation\Application|Factory|View|Application
+    public function showByProductName(Request $request, string $productName): \Illuminate\Contracts\Foundation\Application|Factory|View|Application
     {
-        $user = Auth::user();
-        $reviews = $user->reviews()->with('product', 'user')->get();
+        $product = Product::where('name', $productName)->first();
 
-        $formattedReviews = [];
+        if (!$product) {
+            return redirect()->route('home')->with('error', 'Product not found.');
+        }
+
+        $reviews = Review::with(['user', 'product.owner'])
+            ->where('product_id', $product->id)
+            ->get();
+
+        $formattedReviews = collect();
 
         foreach ($reviews as $review) {
-            $formattedReviews[] = [
+            $formattedReviews->push([
                 'id' => $review->id,
                 'rate' => $review->rate,
                 'review' => $review->review,
-                'productName' => $review->product->name,
-                'OwnerName' => $review->product->owner->name,
+                'productName' => $product->name,
                 'Username' => $review->user->username,
-            ];
+                'OwnerName' => $product->owner->name ?? 'Unknown Owner',
+            ]);
         }
-        return view('reviews.index', compact('formattedReviews'));
-    }
-    public function store(ReviewRequest $request, $product_id): RedirectResponse
-    {
-        $request['user_id'] = auth()->user()->id;
-        $request['product_id'] = $product_id;
-        Review::create($request->all());
-        return redirect()->back()->with('success','Review Added Successfully');
 
-    }
-    public function show (Product $product): View|Application|Factory
-    {
-        $reviews = $product->reviews()->take(5)->get();
-        return view('products.show',compact('product','reviews'));
+        return view('reviews.index', compact('formattedReviews'));
     }
 }

@@ -29,7 +29,7 @@ class CheckoutController extends Controller
     /**
      * Display the checkout page.
      */
-    public function index(): RedirectResponse
+    public function index()
     {
         if (Cart::count() == 0) {
             return redirect()->route('cart.index')->with('error', 'Your cart is empty.');
